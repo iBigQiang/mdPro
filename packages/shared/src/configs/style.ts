@@ -113,7 +113,7 @@ export const widthOptions: IConfigOption[] = [
   },
   {
     label: `电脑端`,
-    value: `w-full`,
+    value: `w-full max-w-[740px]`,
     desc: `适应`,
   },
 ]

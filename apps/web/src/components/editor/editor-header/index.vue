@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Copy, Menu, Palette } from 'lucide-vue-next'
+import { widthOptions } from '@md/shared/configs'
+import { Copy, Menu, Monitor, Palette, Smartphone } from 'lucide-vue-next'
 import { useEditorStore } from '@/stores/editor'
 import { useExportStore } from '@/stores/export'
 import { useRenderStore } from '@/stores/render'
@@ -27,6 +28,10 @@ const { editor } = storeToRefs(editorStore)
 const { output } = storeToRefs(renderStore)
 const { primaryColor } = storeToRefs(themeStore)
 const { isOpenRightSlider } = storeToRefs(uiStore)
+const { previewWidth } = storeToRefs(themeStore)
+
+const mobileWidth = widthOptions[0].value
+const desktopWidth = widthOptions[1].value
 
 // Editor refresh function
 function editorRefresh() {
@@ -237,6 +242,11 @@ function copyToWeChat() {
   copyMode.value = 'txt'
   copy()
 }
+
+function togglePreviewMode() {
+  themeStore.previewWidth = previewWidth.value === mobileWidth ? desktopWidth : mobileWidth
+  editorRefresh()
+}
 </script>
 
 <template>
@@ -280,6 +290,14 @@ function copyToWeChat() {
 
     <!-- 右侧操作区 -->
     <div class="flex flex-wrap items-center gap-2">
+      <Button
+        variant="outline"
+        class="h-9"
+        @click="togglePreviewMode"
+      >
+        <component :is="previewWidth === mobileWidth ? Smartphone : Monitor" class="mr-2 h-4 w-4" />
+        <span>手机/电脑</span>
+      </Button>
       <!-- 复制按钮 -->
       <Button
         variant="outline"

@@ -31,7 +31,7 @@ p {
   color: var(--foreground);
   text-align: justify;
   font-size: 18px; /* 更大的字号 */
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   text-indent: 0; /* 不缩进 */
 }
 
@@ -59,7 +59,8 @@ h2 {
   background-clip: content-box;
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  background: linear-gradient(to bottom,
+  background: linear-gradient(
+    to bottom,
     transparent calc(100% - 15px),
     rgba(0, 152, 116, 0) calc(100% - 0.65em),
     var(--brand-green) 100%
@@ -82,11 +83,12 @@ h3 {
   padding: 2px 6px;
   background-repeat: no-repeat;
   background-position: left bottom;
-  background-size: 100% 0.50em;
-  background-image: linear-gradient(to right,
-    rgba(0, 152, 116, 0.70) 0%,
-    rgba(0, 152, 116, 0.40) 50%,
-    rgba(0, 152, 116, 0.20) 100%
+  background-size: 100% 0.5em;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 152, 116, 0.7) 0%,
+    rgba(0, 152, 116, 0.4) 50%,
+    rgba(0, 152, 116, 0.2) 100%
   );
   margin: 2em 8px 0.75em 0;
 }
@@ -98,14 +100,15 @@ h4 {
   box-decoration-break: clone;
   border-left: none !important;
   font-size: 18px !important;
-  color: #006C54 !important;
+  color: #006c54 !important;
   font-weight: 600 !important;
   line-height: 1.8;
   padding: 2px 6px;
   background-repeat: no-repeat;
   background-position: left bottom;
   background-size: 100% 0.45em;
-  background-image: linear-gradient(to right,
+  background-image: linear-gradient(
+    to right,
     rgba(0, 152, 116, 0.65) 0%,
     rgba(0, 152, 116, 0.35) 50%,
     rgba(0, 152, 116, 0.05) 100%
@@ -131,11 +134,29 @@ h6 {
 }
 
 /* ============解决任意两个标题紧邻时不换行的问题============ */
-h2 + h2::before,  h2 + h4::before, h2 + h5::before, h2 + h6::before,
-h3 + h3::before, h3 + h4::before, h3 + h5::before, h3 + h6::before,
-h4 + h2::before, h4 + h3::before, h4 + h4::before, h4 + h5::before, h4 + h6::before,
-h5 + h2::before, h5 + h3::before, h5 + h4::before, h5 + h5::before, h5 + h6::before,
-h6 + h2::before, h6 + h3::before, h6 + h4::before, h6 + h5::before, h6 + h6::before {
+h2 + h2::before,
+h2 + h4::before,
+h2 + h5::before,
+h2 + h6::before,
+h3 + h3::before,
+h3 + h4::before,
+h3 + h5::before,
+h3 + h6::before,
+h4 + h2::before,
+h4 + h3::before,
+h4 + h4::before,
+h4 + h5::before,
+h4 + h6::before,
+h5 + h2::before,
+h5 + h3::before,
+h5 + h4::before,
+h5 + h5::before,
+h5 + h6::before,
+h6 + h2::before,
+h6 + h3::before,
+h6 + h4::before,
+h6 + h5::before,
+h6 + h6::before {
   content: '';
   display: block;
 }
@@ -185,19 +206,43 @@ blockquote > p {
   margin-bottom: 0.5em;
 }
 
-.alert-title-note { color: #478be6; }
-.alert-title-tip { color: #57ab5a; }
-.alert-title-info { color: #93c5fd; }
-.alert-title-important { color: #986ee2; }
-.alert-title-warning { color: #c69026; }
-.alert-title-caution { color: #e5534b; }
+.alert-title-note {
+  color: #478be6;
+}
+.alert-title-tip {
+  color: #57ab5a;
+}
+.alert-title-info {
+  color: #93c5fd;
+}
+.alert-title-important {
+  color: #986ee2;
+}
+.alert-title-warning {
+  color: #c69026;
+}
+.alert-title-caution {
+  color: #e5534b;
+}
 
-.alert-icon-note { fill: #478be6; }
-.alert-icon-tip { fill: #57ab5a; }
-.alert-icon-info { fill: #93c5fd; }
-.alert-icon-important { fill: #986ee2; }
-.alert-icon-warning { fill: #c69026; }
-.alert-icon-caution { fill: #e5534b; }
+.alert-icon-note {
+  fill: #478be6;
+}
+.alert-icon-tip {
+  fill: #57ab5a;
+}
+.alert-icon-info {
+  fill: #93c5fd;
+}
+.alert-icon-important {
+  fill: #986ee2;
+}
+.alert-icon-warning {
+  fill: #c69026;
+}
+.alert-icon-caution {
+  fill: #e5534b;
+}
 
 /* ==================== 代码块 ==================== */
 pre.code__pre,
@@ -220,7 +265,13 @@ pre.code__pre > code,
   background: none;
   white-space: pre;
   margin: 0;
-  font-family: 'Fira Code', Menlo, Operator Mono, Consolas, Monaco, monospace;
+  font-family:
+    'Fira Code',
+    Menlo,
+    Operator Mono,
+    Consolas,
+    Monaco,
+    monospace;
 }
 
 /* ==================== 行内代码 ==================== */
@@ -284,7 +335,7 @@ hr {
   height: 1px;
   border: none;
   margin: 2em 0;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.1), rgba(0,0,0,0));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
 }
 
 /* ==================== 强调 ==================== */
@@ -371,7 +422,7 @@ td {
 
 .markup-underline {
   text-decoration: none;
-  background-image: linear-gradient(to right, #FECE00, #fff176); /* 使用线性渐变实现纯色背景，方便控制位置和大小 */
+  background-image: linear-gradient(to right, #fece00, #fff176); /* 使用线性渐变实现纯色背景，方便控制位置和大小 */
   background-position: 0 100%; /* 稍微向上一点，避免贴底太紧，或者保持 100% */
   background-repeat: no-repeat;
   background-size: 100% 0.5em; /* 厚度调整 */
@@ -387,7 +438,7 @@ td {
 /* ==================== 强子01自定义高亮 ==================== */
 mark {
   background-color: var(--brand-green) !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
   padding: 2px 5px;
   border-radius: 4px;
   margin: 0 2px;
