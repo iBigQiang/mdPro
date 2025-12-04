@@ -44,8 +44,8 @@ function exportEditorContent2MD() {
   exportStore.exportEditorContent2MD(editorStore.getContent())
 }
 
-function downloadAsCardImage() {
-  exportStore.downloadAsCardImage()
+function downloadAsCardImage(long?: boolean) {
+  exportStore.downloadAsCardImage(long ?? false)
 }
 
 function exportEditorContent2PDF() {
@@ -102,6 +102,10 @@ function exportEditorContent2PDF() {
           <MenubarItem @click="downloadAsCardImage()">
             <Download class="mr-2 size-4" />
             PNG 图片
+          </MenubarItem>
+          <MenubarItem @click="downloadAsCardImage(true)">
+            <Download class="mr-2 size-4" />
+            PNG 长图
           </MenubarItem>
         </MenubarSubContent>
       </MenubarSub>
@@ -178,6 +182,10 @@ function exportEditorContent2PDF() {
           <MenubarItem @click="downloadAsCardImage()">
             <Download class="mr-2 size-4" />
             PNG 图片
+          </MenubarItem>
+          <MenubarItem @click="downloadAsCardImage(true)">
+            <Download class="mr-2 size-4" />
+            PNG 长图
           </MenubarItem>
         </MenubarSubContent>
       </MenubarSub>

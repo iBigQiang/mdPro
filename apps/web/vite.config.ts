@@ -20,7 +20,7 @@ const isCfWorkers = process.env.CF_WORKERS === `1`
 const isCfPages = process.env.CF_PAGES === `1`
 const isGitHubPages = process.env.GITHUB_PAGES === `1`
 
-const base = isNetlify || isCfWorkers || isCfPages ? `/` : isGitHubPages ? `/MD_Editor/` : isUTools ? `./` : `/md/`
+const base = isNetlify || isCfWorkers || isCfPages ? `/` : isGitHubPages ? `/mdPro/` : isUTools ? `./` : `/md/`
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())

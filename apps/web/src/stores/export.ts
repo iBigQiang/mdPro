@@ -10,7 +10,7 @@ import {
 } from '@/utils'
 import { usePostStore } from './post'
 import { useRenderStore } from './render'
-import { useUIStore } from './ui'
+ 
 
 /**
  * 导出功能 Store
@@ -19,7 +19,6 @@ import { useUIStore } from './ui'
 export const useExportStore = defineStore(`export`, () => {
   const postStore = usePostStore()
   const renderStore = useRenderStore()
-  const uiStore = useUIStore()
 
   // 将编辑器内容转换为 HTML
   const editorContent2HTML = () => {
@@ -48,7 +47,7 @@ export const useExportStore = defineStore(`export`, () => {
   }
 
   // 下载卡片图片
-  const downloadAsCardImage = async () => {
+  const downloadAsCardImage = async (long = false) => {
     const currentPost = postStore.currentPost
     if (!currentPost)
       return
@@ -56,17 +55,73 @@ export const useExportStore = defineStore(`export`, () => {
     const el = document.querySelector<HTMLElement>(`#output-wrapper>.preview`)
     if (!el)
       return
+    const contentEl = el.querySelector<HTMLElement>('#output')
 
-    const url = await toPng(el, {
-      backgroundColor: uiStore.isDark ? `` : `#fff`,
+    const mm2px = (mm: number) => Math.round(mm * 3.7795)
+    const padPx = mm2px(10)
+
+    const options: any = {
+      backgroundColor: `#fff`,
       skipFonts: true,
       pixelRatio: Math.max(window.devicePixelRatio || 1, 2),
-      style: {
-        margin: `0`,
-      },
-    })
+      style: { margin: `0` },
+    }
 
-    downloadFile(url, `${sanitizeTitle(currentPost.title)}.png`, `image/png`)
+    const originalClassName = el.className
+    const originalStyle = el.getAttribute('style') || ''
+    const originalContentStyle = contentEl?.getAttribute('style') || ''
+    el.classList.remove('border-x', 'shadow-xl')
+    el.style.border = '0'
+    el.style.borderLeft = '0'
+    el.style.borderRight = '0'
+    el.style.boxShadow = 'none'
+    el.style.webkitBoxShadow = 'none'
+    el.style.outline = 'none'
+    el.style.filter = 'none'
+    el.style.background = '#fff'
+    el.style.backgroundColor = '#fff'
+    el.style.backgroundImage = 'none'
+    el.style.paddingLeft = `${padPx}px`
+    el.style.paddingRight = `${padPx}px`
+    el.style.backgroundClip = 'padding-box'
+
+    if (contentEl) {
+      contentEl.style.paddingLeft = `${padPx}px`
+      contentEl.style.paddingRight = `${padPx}px`
+      contentEl.style.paddingTop = `${Math.round(padPx * 0.6)}px`
+      contentEl.style.paddingBottom = `${Math.round(padPx * 0.6)}px`
+      contentEl.style.background = '#fff'
+      contentEl.style.backgroundColor = '#fff'
+      contentEl.style.backgroundImage = 'none'
+    }
+
+    if (long) {
+      options.width = el.scrollWidth
+      options.height = el.scrollHeight
+      if (options.height > 8000 || options.width > 4000) {
+        options.pixelRatio = 1
+      }
+    }
+    else {
+      const viewport = document.querySelector<HTMLElement>('#preview')
+      const viewportHeight = viewport ? viewport.clientHeight : el.offsetHeight
+      el.style.height = `${viewportHeight}px`
+      el.style.overflow = 'hidden'
+      options.width = el.offsetWidth
+      options.height = viewportHeight
+    }
+
+    try {
+      const url = await toPng(el, options)
+      downloadFile(url, `${sanitizeTitle(currentPost.title)}${long ? `.long` : ``}.png`, `image/png`)
+    }
+    finally {
+      el.className = originalClassName
+      el.setAttribute('style', originalStyle)
+      if (contentEl)
+        contentEl.setAttribute('style', originalContentStyle)
+    }
+
   }
 
   // 导出编辑器内容为 PDF

@@ -138,39 +138,19 @@ export async function exportPDF(title: string = `untitled`) {
       <title>${safeTitle}</title>
       ${stylesToAdd}
       <style>
-        /* 强制打印背景颜色和图片 */
-        * {
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-          color-adjust: exact !important;
-        }
-
-        /* 打印页面设置 */
-        @page {
-          @top-center {
-            content: "${safeTitle}";
-            font-size: 12px;
-            color: #666;
-          }
-          @bottom-left {
-            content: "微信 Markdown 编辑器";
-            font-size: 10px;
-            color: #999;
-          }
-          @bottom-right {
-            content: "第 " counter(page) " 页，共 " counter(pages) " 页";
-            font-size: 10px;
-            color: #999;
-          }
-        }
-
+        @page { size: A4; margin: 10mm; }
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
         @media print {
           body { margin: 0; }
+          pre, .code__pre, blockquote, figure, table, .preview-table, .md-blockquote, .mermaid { break-inside: avoid; page-break-inside: avoid; }
+          thead { display: table-header-group; }
+          tr { break-inside: avoid; page-break-inside: avoid; }
+          h1, h2, h3, h4, h5, h6 { break-after: avoid; page-break-after: avoid; }
         }
       </style>
     </head>
     <body>
-      <div style="width: 100%; max-width: 750px; margin: auto;">
+      <div style="width: 100%;">
         ${htmlStr}
       </div>
     </body>

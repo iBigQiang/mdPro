@@ -70,8 +70,8 @@ function exportEditorContent2MD() {
   exportStore.exportEditorContent2MD(editorStore.getContent())
 }
 
-function downloadAsCardImage() {
-  exportStore.downloadAsCardImage()
+function downloadAsCardImage(long?: boolean) {
+  exportStore.downloadAsCardImage(long ?? false)
 }
 </script>
 
@@ -114,6 +114,9 @@ function downloadAsCardImage() {
       </ContextMenuItem>
       <ContextMenuItem inset @click="downloadAsCardImage()">
         导出 .png
+      </ContextMenuItem>
+      <ContextMenuItem inset @click="downloadAsCardImage(true)">
+        导出 .png 长图
       </ContextMenuItem>
       <ContextMenuSeparator />
       <ContextMenuItem inset @click="copyToClipboard()">

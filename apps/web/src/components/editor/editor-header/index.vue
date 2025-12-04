@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { widthOptions } from '@md/shared/configs'
-import { Copy, Menu, Monitor, Palette, Smartphone } from 'lucide-vue-next'
+import { Copy, Menu, Monitor, Palette, Smartphone, FileText, Download } from 'lucide-vue-next'
 import { useEditorStore } from '@/stores/editor'
 import { useExportStore } from '@/stores/export'
 import { useRenderStore } from '@/stores/render'
@@ -306,6 +306,32 @@ function togglePreviewMode() {
       >
         <Copy class="mr-2 h-4 w-4" />
         <span>复制</span>
+      </Button>
+
+      <!-- 导出按钮组：PDF / PNG / 长图 -->
+      <Button
+        variant="outline"
+        class="h-9 hidden md:inline-flex"
+        @click="exportStore.exportEditorContent2PDF()"
+      >
+        <FileText class="mr-2 h-4 w-4" />
+        <span>导出PDF</span>
+      </Button>
+      <Button
+        variant="outline"
+        class="h-9 hidden md:inline-flex"
+        @click="exportStore.downloadAsCardImage(false)"
+      >
+        <Download class="mr-2 h-4 w-4" />
+        <span>导出PNG</span>
+      </Button>
+      <Button
+        variant="outline"
+        class="h-9 hidden md:inline-flex"
+        @click="exportStore.downloadAsCardImage(true)"
+      >
+        <Download class="mr-2 h-4 w-4" />
+        <span>导出长图</span>
       </Button>
 
       <!-- 文章信息（移动端隐藏） -->
