@@ -176,5 +176,5 @@ docker run -d -p 8080:80 doocs/md:latest
 
 ## 💬 反馈与交流
 
-如果你在使用过程中遇到问题，或者有好的建议，欢迎在 [🐛 Issues](https://ibigqiang.github.io/mdPro/issues) 中反馈。你也可以加入我们的交流群，和我们一起讨论，若群二维码失效，请添加好友，备注 `md`，我们会拉你进群。
+如果你在使用过程中遇到问题，或者有好的建议，欢迎在 [🐛 Issues](https://github.com/iBigQiang/mdPro/issues) 中反馈。你也可以加入我们的交流群，和我们一起讨论，若群二维码失效，请添加好友，备注 `md`，我们会拉你进群。
 
