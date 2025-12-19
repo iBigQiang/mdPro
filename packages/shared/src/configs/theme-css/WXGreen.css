@@ -1,7 +1,7 @@
 :root {
   --brand-green: #009874;
   --brand-green-dark: #008264;
-  --blockquote-border-color: #009874;
+  --blockquote-border-color: #E6F9F0;
   --table-header-bg: rgba(0, 0, 0, 0.05);
   --table-header-fg: #333333;
 }
@@ -167,14 +167,15 @@ p {
 blockquote {
   font-style: italic;
   padding: 1em 1em 1em 2em;
-  border: 1px solid var(--blockquote-border-color) !important;
-  border-left: 4px solid var(--brand-green) !important;
+  border: 0px solid var(--blockquote-border-color) !important;
+  border-left: 3px solid var(--brand-green) !important;
   border-radius: 6px;
   color: rgba(0, 0, 0, 0.6);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   margin-top: 1em;
   margin-bottom: 1em;
-  background: var(--blockquote-background) !important;
+  /* background: var(--blockquote-background) !important; */
+  background-color: #E6F9F0;
 }
 
 blockquote > p {
