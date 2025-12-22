@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import zanshangImg from './WX88667178_ZanShang.jpg'
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -10,14 +11,19 @@ const emit = defineEmits([`close`])
 
 const contributors = [
   {
+    name: `强子`,
+    imageUrl: zanshangImg,
+    altText: `赞赏二维码 1`,
+  },
+  {
     name: `yanglbme`,
     imageUrl: `https://cdn-doocs.oss-cn-shenzhen.aliyuncs.com/gh/doocs/md/images/support1.jpg`,
-    altText: `赞赏二维码 1`,
+    altText: `赞赏二维码 2`,
   },
   {
     name: `yangfong`,
     imageUrl: `https://cdn-doocs.oss-cn-shenzhen.aliyuncs.com/gh/doocs/md/images/support2.jpg`,
-    altText: `赞赏二维码 2`,
+    altText: `赞赏二维码 3`,
   },
 ]
 

@@ -138,10 +138,19 @@ export async function exportPDF(title: string = `untitled`) {
       <title>${safeTitle}</title>
       ${stylesToAdd}
       <style>
-        @page { size: auto; margin: 10mm; }
+        @page { 
+          size: auto; 
+          margin-top: 0; /* 隐藏浏览器默认页眉（时间、文件名） */
+          margin-bottom: 10mm; 
+          margin-left: 10mm; 
+          margin-right: 10mm; 
+        }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
         @media print {
-          body { margin: 0; }
+          body { 
+            margin: 0; 
+            padding-top: 15mm; /* 补偿隐藏页眉后的顶部边距 */
+          }
           table { width: auto !important; table-layout: auto !important; border-collapse: collapse; }
           th, td { word-break: keep-all !important; white-space: nowrap !important; }
           pre, .code__pre, blockquote, figure, table, .preview-table, .md-blockquote, .mermaid { break-inside: avoid; page-break-inside: avoid; }
@@ -158,6 +167,14 @@ export async function exportPDF(title: string = `untitled`) {
     </body>
     </html>
   `)
+
+  // 修正 about:blank 网址问题，使页脚显示正确的在线地址
+  try {
+    printWindow.history.replaceState(null, '', window.location.href)
+  }
+  catch (e) {
+    console.warn('Unable to replace state:', e)
+  }
 
   printWindow.document.close()
 
