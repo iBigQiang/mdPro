@@ -9,23 +9,19 @@ jobs:
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    if: github.repository == 'doocs/md'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
-      - name: Extract Changelog for Tag
+      - name: Extract Changelog
         id: changelog
         run: |
-          TAG_NAME="${GITHUB_REF##*/}"
-          echo "Extracting changelog for $TAG_NAME"
+          echo "Extracting latest changelog from 升级日志文档.md"
+          # 提取最后一个 ## 及其之后的所有内容
+          CHANGELOG=$(sed -n 'H; /^## /h; ${g;p;}' "升级日志文档.md")
 
-          # 提取 CHANGELOG.md 中对应版本块的内容
-          CHANGELOG=$(awk "/^## \\[$TAG_NAME\\]/ {flag=1; next} /^## \\[/ {flag=0} flag" CHANGELOG.md)
-
-          # 如果为空就设置默认信息
           if [ -z "$CHANGELOG" ]; then
-            CHANGELOG="No changelog entry found for $TAG_NAME."
+            CHANGELOG="No changelog entry found in 升级日志文档.md"
           fi
 
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
@@ -33,20 +29,15 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
           body: |
-            # 微信 Markdown 编辑器 ${{ github.ref_name }} 发布🎈
+            # mdPro ${{ github.ref_name }} 发布🎈
 
-            [![github](https://badgen.net/badge/>>/GitHub/cyan)](https://github.com/doocs/md/releases) [![gitee](https://badgen.net/badge/>>/Gitee/cyan)](https://gitee.com/doocs/md/releases) [![gitcode](https://badgen.net/badge/>>/GitCode/cyan)](https://gitcode.com/doocs/md/releases)
-
-            > Markdown 文档自动即时渲染为微信图文，让你不再为微信内容排版而发愁！
+            > 一款高度简洁的微信 Markdown 编辑器
 
             ${{ steps.changelog.outputs.changelog }}
-
           draft: false
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
