@@ -40,7 +40,6 @@ const {
   isMobile,
   isEditOnLeft,
   isOpenPostSlider,
-  isOpenRightSlider,
   isOpenConfirmDialog,
 } = storeToRefs(uiStore)
 
@@ -692,71 +691,93 @@ onUnmounted(() => {
             <PostSlider />
           </ResizablePanel>
           <ResizableHandle class="hidden md:block" />
-          <ResizablePanel class="flex">
-            <div
-              v-show="!isMobile || (isMobile && showEditor)"
-              ref="codeMirrorWrapper"
-              class="codeMirror-wrapper relative flex-1"
-              :class="{
-                'order-1 border-l': !isEditOnLeft,
-                'border-r': isEditOnLeft,
-              }"
-            >
-              <SearchTab v-if="codeMirrorView" ref="searchTabRef" :editor-view="codeMirrorView as any" />
-              <SidebarAIToolbar
-                :is-mobile="isMobile"
-                :show-editor="showEditor"
-              />
-
-              <EditorContextMenu>
+          <ResizablePanel class="flex overflow-hidden">
+            <ResizablePanelGroup v-model:layout="uiStore.mainLayout" direction="horizontal" class="flex-1">
+              <ResizablePanel :min-size="!isMobile ? 10 : 0">
                 <div
-                  id="editor"
-                  ref="editorRef"
-                  class="codemirror-container"
-                />
-              </EditorContextMenu>
-            </div>
-            <div
-              v-show="!isMobile || (isMobile && !showEditor)"
-              class="relative flex-1 overflow-x-hidden transition-width"
-              :class="[isOpenRightSlider ? 'w-0' : 'w-100']"
-            >
-              <div
-                id="preview"
-                ref="previewRef"
-                class="preview-wrapper w-full p-5 flex justify-center"
-              >
-                <div
-                  id="output-wrapper"
-                  class="w-full max-w-full"
-                  :class="{ output_night: !backLight }"
+                  v-show="!isMobile || (isMobile && showEditor)"
+                  ref="codeMirrorWrapper"
+                  class="codeMirror-wrapper relative flex-1 h-full overflow-hidden"
+                  :class="{
+                    'order-1 border-l': !isEditOnLeft,
+                    'border-r': isEditOnLeft,
+                  }"
                 >
-                  <div
-                    class="preview border-x shadow-xl mx-auto"
-                    :class="[
-                      isMobile ? 'w-full' : previewWidth,
-                      themeStore.previewWidth === 'w-[375px]' ? 'max-w-full' : '',
-                    ]"
-                  >
-                    <section id="output" class="w-full" v-html="output" />
-                    <div v-if="isCoping" class="loading-mask">
-                      <div class="loading-mask-box">
-                        <div class="loading__img" />
-                        <span>正在生成</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <BackTop
-                  target="preview"
-                  :right="isMobile ? 24 : 20"
-                  :bottom="isMobile ? 90 : 20"
-                />
-              </div>
+                  <SearchTab v-if="codeMirrorView" ref="searchTabRef" :editor-view="codeMirrorView as any" />
+                  <SidebarAIToolbar
+                    :is-mobile="isMobile"
+                    :show-editor="showEditor"
+                  />
 
-              <FloatingToc />
-            </div>
-            <CssEditor />
+                  <EditorContextMenu>
+                    <div
+                      id="editor"
+                      ref="editorRef"
+                      class="codemirror-container h-full"
+                    />
+                  </EditorContextMenu>
+                </div>
+              </ResizablePanel>
+
+              <ResizableHandle v-if="!isMobile" class="hidden md:block" />
+
+              <ResizablePanel :min-size="!isMobile ? 10 : 0">
+                <!-- 预览区与CSS编辑器的可调整布局 -->
+                <ResizablePanelGroup direction="horizontal" class="h-full">
+                  <!-- 预览区 Panel -->
+                  <ResizablePanel :default-size="uiStore.isShowCssEditor ? 60 : 100" :min-size="30">
+                    <div
+                      v-show="!isMobile || (isMobile && !showEditor)"
+                      class="relative h-full w-full overflow-x-auto transition-width"
+                    >
+                      <div
+                        id="preview"
+                        ref="previewRef"
+                        class="preview-wrapper h-full w-full p-5 flex justify-center"
+                      >
+                        <div
+                          id="output-wrapper"
+                          class="w-full max-w-full"
+                          :class="{ output_night: !backLight }"
+                        >
+                          <div
+                            class="preview border-x shadow-xl mx-auto"
+                            :class="[
+                              isMobile ? 'w-full' : previewWidth,
+                              themeStore.previewWidth === 'w-[375px]' ? 'max-w-full' : '',
+                            ]"
+                          >
+                            <section id="output" class="w-full" v-html="output" />
+                            <div v-if="isCoping" class="loading-mask">
+                              <div class="loading-mask-box">
+                                <div class="loading__img" />
+                                <span>正在生成</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <BackTop
+                          target="preview"
+                          :right="isMobile ? 24 : 20"
+                          :bottom="isMobile ? 90 : 20"
+                        />
+                      </div>
+
+                      <FloatingToc />
+                    </div>
+                  </ResizablePanel>
+
+                  <!-- 预览区与CSS编辑器之间的可拖动分割线 -->
+                  <ResizableHandle v-if="uiStore.isShowCssEditor && !isMobile" class="hidden md:block" />
+
+                  <!-- CSS编辑器 Panel -->
+                  <ResizablePanel v-if="uiStore.isShowCssEditor" :default-size="40" :min-size="20" :max-size="60">
+                    <CssEditor />
+                  </ResizablePanel>
+                </ResizablePanelGroup>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+
             <RightSlider />
           </ResizablePanel>
         </ResizablePanelGroup>

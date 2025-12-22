@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { widthOptions } from '@md/shared/configs'
-import { Copy, Menu, Monitor, Palette, Smartphone, FileText, Download } from 'lucide-vue-next'
+import { ChevronDown, Copy, Download, FileText, Maximize, Menu, Palette, Smartphone, Tablet } from 'lucide-vue-next'
 import { useEditorStore } from '@/stores/editor'
 import { useExportStore } from '@/stores/export'
 import { useRenderStore } from '@/stores/render'
@@ -32,6 +32,7 @@ const { previewWidth } = storeToRefs(themeStore)
 
 const mobileWidth = widthOptions[0].value
 const desktopWidth = widthOptions[1].value
+const fullWidth = widthOptions[2].value
 
 // Editor refresh function
 function editorRefresh() {
@@ -244,7 +245,18 @@ function copyToWeChat() {
 }
 
 function togglePreviewMode() {
-  themeStore.previewWidth = previewWidth.value === mobileWidth ? desktopWidth : mobileWidth
+  if (previewWidth.value === mobileWidth) {
+    themeStore.previewWidth = desktopWidth
+    uiStore.mainLayout = [50, 50]
+  }
+  else if (previewWidth.value === desktopWidth) {
+    themeStore.previewWidth = fullWidth
+    uiStore.mainLayout = [30, 70]
+  }
+  else {
+    themeStore.previewWidth = mobileWidth
+    uiStore.mainLayout = [50, 50]
+  }
   editorRefresh()
 }
 </script>
@@ -254,7 +266,7 @@ function togglePreviewMode() {
     class="header-container h-15 flex flex-wrap items-center justify-between px-5 relative"
   >
     <!-- 桌面端左侧菜单 -->
-    <div class="space-x-1 hidden md:flex">
+    <div class="space-x-1 hidden lg:flex">
       <Menubar class="menubar border-0">
         <FileDropdown @open-editor-state="handleOpenEditorState" />
         <EditDropdown @copy="handleCopy" />
@@ -267,7 +279,7 @@ function togglePreviewMode() {
     </div>
 
     <!-- 移动端汉堡菜单按钮 -->
-    <div class="md:hidden">
+    <div class="lg:hidden">
       <Menubar class="menubar border-0 p-0">
         <MenubarMenu>
           <MenubarTrigger class="p-0">
@@ -295,8 +307,11 @@ function togglePreviewMode() {
         class="h-9"
         @click="togglePreviewMode"
       >
-        <component :is="previewWidth === mobileWidth ? Smartphone : Monitor" class="mr-2 h-4 w-4" />
-        <span>手机/电脑</span>
+        <component
+          :is="previewWidth === mobileWidth ? Smartphone : (previewWidth === desktopWidth ? Tablet : Maximize)"
+          class="mr-2 h-4 w-4"
+        />
+        <span>{{ previewWidth === mobileWidth ? '手机' : (previewWidth === desktopWidth ? '电脑' : '全屏') }}</span>
       </Button>
       <!-- 复制按钮 -->
       <Button
@@ -308,31 +323,26 @@ function togglePreviewMode() {
         <span>复制</span>
       </Button>
 
-      <!-- 导出按钮组：PDF / PNG / 长图 -->
-      <Button
-        variant="outline"
-        class="h-9 hidden md:inline-flex"
-        @click="exportStore.exportEditorContent2PDF()"
-      >
-        <FileText class="mr-2 h-4 w-4" />
-        <span>导出PDF</span>
-      </Button>
-      <Button
-        variant="outline"
-        class="h-9 hidden md:inline-flex"
-        @click="exportStore.downloadAsCardImage(false)"
-      >
-        <Download class="mr-2 h-4 w-4" />
-        <span>导出PNG</span>
-      </Button>
-      <Button
-        variant="outline"
-        class="h-9 hidden md:inline-flex"
-        @click="exportStore.downloadAsCardImage(true)"
-      >
-        <Download class="mr-2 h-4 w-4" />
-        <span>导出长图</span>
-      </Button>
+      <!-- 导出按钮组 -->
+      <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+          <Button variant="outline" class="h-9 hidden md:inline-flex">
+            <Download class="mr-2 h-4 w-4" />
+            <span>导出</span>
+            <ChevronDown class="ml-2 h-4 w-4 opacity-50" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem @click="exportStore.exportEditorContent2PDF()">
+            <FileText class="mr-2 h-4 w-4" />
+            <span>导出PDF</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem @click="exportStore.downloadAsCardImage(true)">
+            <Download class="mr-2 h-4 w-4" />
+            <span>导出图片</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       <!-- 文章信息（移动端隐藏） -->
       <PostInfo class="hidden md:inline-flex" />
@@ -365,106 +375,106 @@ function togglePreviewMode() {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 50;
 
-  @media (max-width: 768px) {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+  @media (max-width: 1024px) {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 }
 
 .menubar {
-  user-select: none;
+user-select: none;
 
-  :deep([data-radix-menubar-trigger]) {
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 0.875rem;
-    border-radius: 6px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+:deep([data-radix-menubar-trigger]) {
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 0.875rem;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 
-    &:hover {
-      background: hsl(var(--accent) / 0.8);
-      color: hsl(var(--accent-foreground));
-      transform: translateY(-1px);
-    }
-
-    &[data-state='open'] {
-      background: hsl(var(--accent));
-      color: hsl(var(--accent-foreground));
-      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
+  &:hover {
+    background: hsl(var(--accent) / 0.8);
+    color: hsl(var(--accent-foreground));
+    transform: translateY(-1px);
   }
 
-  :deep([data-radix-menubar-content]) {
-    animation: slideDownAndFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  &[data-state='open'] {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
   }
 
-  :deep([data-radix-menubar-item]) {
-    border-radius: 4px;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:hover {
-      background: hsl(var(--accent) / 0.8);
-    }
-  }
-
-  :deep([data-radix-menubar-sub-trigger]) {
-    border-radius: 4px;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:hover {
-      background: hsl(var(--accent) / 0.8);
-    }
-  }
-}
-
-kbd {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 1.5rem;
-  height: 1.375rem;
-  border: 1px solid hsl(var(--border));
-  background: linear-gradient(to bottom, hsl(var(--muted)), hsl(var(--muted) / 0.9));
-  padding: 0 0.375rem;
-  border-radius: 4px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  line-height: 1;
-  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
-  box-shadow:
-    0 1px 0 hsl(var(--border)),
-    inset 0 0.5px 0 hsl(var(--background));
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-@keyframes slideDownAndFade {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
+  &:active {
     transform: translateY(0);
   }
 }
 
-@media (max-width: 768px) {
-  .menubar {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
+:deep([data-radix-menubar-content]) {
+  animation: slideDownAndFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-    > * {
-      width: 100%;
-      justify-content: flex-start;
-    }
+:deep([data-radix-menubar-item]) {
+  border-radius: 4px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: hsl(var(--accent) / 0.8);
   }
+}
+
+:deep([data-radix-menubar-sub-trigger]) {
+  border-radius: 4px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: hsl(var(--accent) / 0.8);
+  }
+}
+}
+
+kbd {
+display: inline-flex;
+justify-content: center;
+align-items: center;
+min-width: 1.5rem;
+height: 1.375rem;
+border: 1px solid hsl(var(--border));
+background: linear-gradient(to bottom, hsl(var(--muted)), hsl(var(--muted) / 0.9));
+padding: 0 0.375rem;
+border-radius: 4px;
+font-size: 0.6875rem;
+font-weight: 600;
+line-height: 1;
+font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+box-shadow:
+  0 1px 0 hsl(var(--border)),
+  inset 0 0.5px 0 hsl(var(--background));
+transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+text-transform: uppercase;
+letter-spacing: 0.025em;
+}
+
+@keyframes slideDownAndFade {
+from {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+to {
+  opacity: 1;
+  transform: translateY(0);
+}
+}
+
+@media (max-width: 1024px) {
+.menubar {
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+
+  > * {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
 }
 </style>

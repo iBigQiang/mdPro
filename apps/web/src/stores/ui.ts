@@ -31,6 +31,9 @@ export const useUIStore = defineStore(`ui`, () => {
   // 是否为移动端
   const isMobile = store.reactive(`isMobile`, false)
 
+  // 编辑器与预览区的比例 [编辑器%, 预览区%]
+  const mainLayout = store.reactive(addPrefix(`mainLayout`), [50, 50])
+
   // 是否固定显示浮动目录
   const isPinFloatingToc = store.reactive(addPrefix(`isPinFloatingToc`), false)
   const togglePinFloatingToc = useToggle(isPinFloatingToc)
@@ -110,6 +113,7 @@ export const useUIStore = defineStore(`ui`, () => {
     isOpenRightSlider,
     isOpenPostSlider,
     isMobile,
+    mainLayout,
     isPinFloatingToc,
     isShowFloatingToc,
 

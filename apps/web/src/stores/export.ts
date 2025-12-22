@@ -10,7 +10,8 @@ import {
 } from '@/utils'
 import { usePostStore } from './post'
 import { useRenderStore } from './render'
- 
+import { useThemeStore } from './theme'
+
 
 /**
  * 导出功能 Store
@@ -46,82 +47,201 @@ export const useExportStore = defineStore(`export`, () => {
     exportPureHTML(content, currentPost.title)
   }
 
-  // 下载卡片图片
+  // 下载卡片图片 - 使用克隆DOM并强制移除所有宽度限制
   const downloadAsCardImage = async (long = false) => {
     const currentPost = postStore.currentPost
     if (!currentPost)
       return
 
-    const el = document.querySelector<HTMLElement>(`#output-wrapper>.preview`)
-    if (!el)
+    // 获取原始预览元素
+    const originalEl = document.querySelector<HTMLElement>(`#output-wrapper>.preview`)
+    if (!originalEl)
       return
-    const contentEl = el.querySelector<HTMLElement>('#output')
 
     const mm2px = (mm: number) => Math.round(mm * 3.7795)
     const padPx = mm2px(10)
 
+    // 判断当前预览模式
+    const themeStore = useThemeStore()
+    const previewWidth = themeStore.previewWidth || ''
+    const isMobileMode = previewWidth.includes('w-[375px]')
+    const isDesktopMode = previewWidth.includes('max-w-[740px]')
+    const isFullScreenMode = !isMobileMode && !isDesktopMode
+
+    // 根据模式确定导出宽度
+    const fixedExportWidth = isMobileMode ? 375 : (isDesktopMode ? 740 : 0) // 0 表示不限制（全屏模式）
+
+    // 注入全局样式到 head（确保对克隆元素生效）
+    const globalStyle = document.createElement('style')
+    globalStyle.id = 'export-global-style'
+    
+    // 根据模式决定样式
+    const tableWidthStyle = isFullScreenMode 
+      ? `width: auto !important; max-width: none !important; table-layout: auto !important;`
+      : `width: 100% !important; max-width: 100% !important; table-layout: fixed !important;`
+    
+    const cellWidthStyle = isFullScreenMode
+      ? `white-space: nowrap !important; word-break: keep-all !important; width: auto !important; max-width: none !important; min-width: 0 !important;`
+      : `white-space: normal !important; word-break: break-word !important;`
+
+    // 手机/电脑模式下图片样式：限制最大宽度并居中
+    const imageStyle = isFullScreenMode
+      ? ``
+      : `
+      #export-clone img {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+      `
+
+    globalStyle.innerHTML = `
+      #export-clone,
+      #export-clone * {
+        ${isFullScreenMode ? 'max-width: none !important;' : ''}
+        box-sizing: border-box !important;
+      }
+      #export-clone table {
+        ${tableWidthStyle}
+        min-width: 0 !important;
+        border-collapse: collapse !important;
+      }
+      #export-clone th,
+      #export-clone td {
+        ${cellWidthStyle}
+      }
+      ${imageStyle}
+      #export-clone *::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+      }
+      #export-clone {
+        scrollbar-width: none !important;
+      }
+    `
+    document.head.appendChild(globalStyle)
+
+    // 深度克隆预览元素
+    const clonedEl = originalEl.cloneNode(true) as HTMLElement
+    clonedEl.id = 'export-clone'
+    
+    // 移除可能限制宽度的 CSS 类
+    clonedEl.classList.remove('border-x', 'shadow-xl', 'w-full', 'max-w-full')
+    
+    // 设置克隆元素基础样式 - 根据模式设置宽度
+    const clonedWidth = fixedExportWidth > 0 ? `${fixedExportWidth}px` : 'auto'
+    const clonedMaxWidth = fixedExportWidth > 0 ? `${fixedExportWidth}px` : 'none'
+    
+    clonedEl.style.cssText = `
+      position: fixed !important;
+      left: 0 !important;
+      top: 0 !important;
+      z-index: 99999 !important;
+      background: #fff !important;
+      border: none !important;
+      box-shadow: none !important;
+      width: ${clonedWidth} !important;
+      max-width: ${clonedMaxWidth} !important;
+      height: auto !important;
+      overflow: visible !important;
+      padding: ${padPx}px !important;
+      transform: none !important;
+    `
+    
+    // 遍历所有子元素，强制移除宽度限制
+    const allElements = clonedEl.querySelectorAll('*')
+    allElements.forEach((el) => {
+      const htmlEl = el as HTMLElement
+      // 移除可能限制宽度的类
+      htmlEl.classList.remove('w-full', 'max-w-full', 'overflow-hidden', 'overflow-x-hidden', 'overflow-y-hidden')
+      // 强制设置样式
+      htmlEl.style.maxWidth = 'none'
+      htmlEl.style.overflow = 'visible'
+    })
+
+    // 特别处理内容容器
+    const clonedContent = clonedEl.querySelector<HTMLElement>('#output')
+    if (clonedContent) {
+      clonedContent.style.cssText = `
+        width: auto !important;
+        max-width: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      `
+    }
+
+    // 特别处理表格
+    const tables = clonedEl.querySelectorAll('table')
+    tables.forEach(table => {
+      const tbl = table as HTMLElement
+      tbl.style.cssText = `
+        width: auto !important;
+        max-width: none !important;
+        table-layout: auto !important;
+        border-collapse: collapse !important;
+      `
+      // 处理所有单元格
+      const cells = tbl.querySelectorAll('th, td')
+      cells.forEach(cell => {
+        const c = cell as HTMLElement
+        c.style.whiteSpace = 'nowrap'
+        c.style.wordBreak = 'keep-all'
+        c.style.width = 'auto'
+        c.style.maxWidth = 'none'
+      })
+    })
+
+    // 添加到 body
+    document.body.appendChild(clonedEl)
+
+    // 等待渲染完成
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    // 测量实际尺寸 - 手机/电脑模式使用固定宽度，全屏模式使用测量值
+    const measuredWidth = clonedEl.scrollWidth
+    // 手机/电脑模式：直接使用固定宽度（padding 已包含在克隆元素中）
+    const contentWidth = fixedExportWidth > 0 ? fixedExportWidth : measuredWidth
+    const contentHeight = long ? clonedEl.scrollHeight : Math.min(clonedEl.scrollHeight, 800)
+    
+    // 设置最终尺寸
+    clonedEl.style.width = `${contentWidth}px`
+    clonedEl.style.height = `${contentHeight}px`
+    clonedEl.style.overflow = 'hidden'
+
     const options: any = {
-      backgroundColor: `#fff`,
+      backgroundColor: '#fff',
       skipFonts: true,
       pixelRatio: Math.max(window.devicePixelRatio || 1, 2),
-      style: { margin: `0` },
+      width: contentWidth,
+      height: contentHeight,
+      style: {
+        margin: '0',
+        overflow: 'hidden',
+      },
     }
 
-    const originalClassName = el.className
-    const originalStyle = el.getAttribute('style') || ''
-    const originalContentStyle = contentEl?.getAttribute('style') || ''
-    el.classList.remove('border-x', 'shadow-xl')
-    el.style.border = '0'
-    el.style.borderLeft = '0'
-    el.style.borderRight = '0'
-    el.style.boxShadow = 'none'
-    el.style.webkitBoxShadow = 'none'
-    el.style.outline = 'none'
-    el.style.filter = 'none'
-    el.style.background = '#fff'
-    el.style.backgroundColor = '#fff'
-    el.style.backgroundImage = 'none'
-    el.style.paddingLeft = `${padPx}px`
-    el.style.paddingRight = `${padPx}px`
-    el.style.backgroundClip = 'padding-box'
-
-    if (contentEl) {
-      contentEl.style.paddingLeft = `${padPx}px`
-      contentEl.style.paddingRight = `${padPx}px`
-      contentEl.style.paddingTop = `${Math.round(padPx * 0.6)}px`
-      contentEl.style.paddingBottom = `${Math.round(padPx * 0.6)}px`
-      contentEl.style.background = '#fff'
-      contentEl.style.backgroundColor = '#fff'
-      contentEl.style.backgroundImage = 'none'
-    }
-
-    if (long) {
-      options.width = el.scrollWidth
-      options.height = el.scrollHeight
-      if (options.height > 8000 || options.width > 4000) {
-        options.pixelRatio = 1
-      }
-    }
-    else {
-      const viewport = document.querySelector<HTMLElement>('#preview')
-      const viewportHeight = viewport ? viewport.clientHeight : el.offsetHeight
-      el.style.height = `${viewportHeight}px`
-      el.style.overflow = 'hidden'
-      options.width = el.offsetWidth
-      options.height = viewportHeight
+    // 大尺寸图片降低像素比
+    if (contentHeight > 10000 || contentWidth > 5000) {
+      options.pixelRatio = 1
     }
 
     try {
-      const url = await toPng(el, options)
+      const url = await toPng(clonedEl, options)
       downloadFile(url, `${sanitizeTitle(currentPost.title)}${long ? `.long` : ``}.png`, `image/png`)
     }
-    finally {
-      el.className = originalClassName
-      el.setAttribute('style', originalStyle)
-      if (contentEl)
-        contentEl.setAttribute('style', originalContentStyle)
+    catch (err) {
+      console.error('导出图片失败:', err)
     }
-
+    finally {
+      // 清理
+      document.body.removeChild(clonedEl)
+      document.getElementById('export-global-style')?.remove()
+    }
   }
 
   // 导出编辑器内容为 PDF

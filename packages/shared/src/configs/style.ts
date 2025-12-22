@@ -107,7 +107,7 @@ export const colorOptions: IConfigOption[] = [
 
 export const widthOptions: IConfigOption[] = [
   {
-    label: `移动端`,
+    label: `手机端`,
     value: `w-[375px]`,
     desc: `固定`,
   },
@@ -115,6 +115,11 @@ export const widthOptions: IConfigOption[] = [
     label: `电脑端`,
     value: `w-full max-w-[740px]`,
     desc: `适应`,
+  },
+  {
+    label: `全屏`,
+    value: `w-full`,
+    desc: `全宽`,
   },
 ]
 

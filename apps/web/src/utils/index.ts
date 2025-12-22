@@ -138,10 +138,12 @@ export async function exportPDF(title: string = `untitled`) {
       <title>${safeTitle}</title>
       ${stylesToAdd}
       <style>
-        @page { size: A4; margin: 10mm; }
+        @page { size: auto; margin: 10mm; }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
         @media print {
           body { margin: 0; }
+          table { width: auto !important; table-layout: auto !important; border-collapse: collapse; }
+          th, td { word-break: keep-all !important; white-space: nowrap !important; }
           pre, .code__pre, blockquote, figure, table, .preview-table, .md-blockquote, .mermaid { break-inside: avoid; page-break-inside: avoid; }
           thead { display: table-header-group; }
           tr { break-inside: avoid; page-break-inside: avoid; }
@@ -150,7 +152,7 @@ export async function exportPDF(title: string = `untitled`) {
       </style>
     </head>
     <body>
-      <div style="width: 100%;">
+      <div style="width: 100%; min-width: fit-content;">
         ${htmlStr}
       </div>
     </body>
@@ -266,7 +268,7 @@ function createEmptyNode(): HTMLElement {
  * 获取需要添加的样式
  * @returns {Promise<string>} 样式字符串
  */
-async function getStylesToAdd(): Promise<string> {
+export async function getStylesToAdd(): Promise<string> {
   const themeStyles = getThemeStyles()
   const hljsStyles = await getHljsStyles()
   return [themeStyles, hljsStyles].filter(Boolean).join(``)
