@@ -366,7 +366,7 @@ table {
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 8px;
-  margin: 1em 8px;
+  margin: 1em auto;
   color: hsl(var(--foreground));
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
