@@ -1,0 +1,11 @@
+node_modules
+apps/web/dist
+apps/utools/release
+packages/md-cli/*.tgz
+.git
+.vscode
+.agent
+.gemini
+dist
+*.log
+.DS_Store

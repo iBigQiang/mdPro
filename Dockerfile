@@ -1,24 +1,19 @@
 # Stage 1: Build
-FROM node:22-alpine AS builder
+FROM node:22-slim AS builder
 
 # 安装 pnpm
-RUN npm install -g pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 WORKDIR /app
 
-# 复制依赖定义文件
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/web/package.json ./apps/web/
-COPY packages/shared/package.json ./packages/shared/
-COPY packages/core/package.json ./packages/core/
-COPY packages/config/package.json ./packages/config/
-COPY packages/md-cli/package.json ./packages/md-cli/
+# 复制所有文件（依赖 .dockerignore 排除 node_modules 等）
+# 这样可以确保 patches、所有 package.json、pnpm-workspace.yaml 都在位
+COPY . .
 
 # 安装依赖
 RUN pnpm install --frozen-lockfile
-
-# 复制源代码
-COPY . .
 
 # 构建项目
 RUN pnpm --filter @md/web build
@@ -27,7 +22,6 @@ RUN pnpm --filter @md/web build
 FROM nginx:alpine
 
 # 复制构建产物到 Nginx 默认目录
-# 注意：根据 apps/web/package.json，构建产物在 apps/web/dist
 COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 
 # 暴露 80 端口
