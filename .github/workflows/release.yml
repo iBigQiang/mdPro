@@ -19,12 +19,18 @@ jobs:
         id: changelog
         run: |
           echo "Extracting latest changelog from 升级日志文档.md"
-          # 提取最后一个 ## 及其之后的所有内容
-          CHANGELOG=$(sed -n 'H; /^## /h; ${g;p;}' "升级日志文档.md")
-
-          if [ -z "$CHANGELOG" ]; then
-            CHANGELOG="No changelog entry found in 升级日志文档.md"
-          fi
+          
+          # 使用 Python 脚本更可靠地提取第一个 ## 块
+          CHANGELOG=$(python3 -c "
+          import re
+          with open('升级日志文档.md', 'r', encoding='utf-8') as f:
+              content = f.read()
+              match = re.search(r'##[\s\S]*?(?=\n##|$)', content)
+              if match:
+                  print(match.group(0).strip())
+              else:
+                  print('No changelog entry found.')
+          ")
 
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT

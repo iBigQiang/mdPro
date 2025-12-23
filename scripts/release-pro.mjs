@@ -63,25 +63,40 @@ try {
   run(`git push origin main`);
   run(`git push origin ${version}`);
 
-  // 5. 调用 GitHub CLI 创建 Release
+  // 5. 调用 GitHub CLI 创建 Release (可选)
   console.log('🌐 正在同步到 GitHub Releases...');
   
-  // 将日志写入临时文件以处理多行文本
-  const tempFile = 'temp_release_log.md';
-  fs.writeFileSync(tempFile, latestLog);
-
+  // 检查是否安装了 gh CLI
+  let hasGh = false;
   try {
-    // 如果 Release 已存在，先删除 (确保覆盖)
-    try { execSync(`gh release delete ${version} -y`, { stdio: 'ignore' }); } catch (e) {}
-    
-    // 创建新的 Release
-    run(`gh release create ${version} -F ${tempFile} -t "${version}"`);
-    console.log(`\n✅ 发布成功！请访问: https://github.com/iBigQiang/mdPro/releases/tag/${version}`);
-  } catch (err) {
-    console.error(`❌ GitHub Release 创建失败 (请确认是否已安装并登录 gh CLI): ${err.message}`);
-  } finally {
-    if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
+    execSync('gh --version', { stdio: 'ignore' });
+    hasGh = true;
+  } catch (e) {
+    console.log('💡 未检测到 GitHub CLI (gh)，将跳过本地 Release 创建，依靠 GitHub Actions 自动处理。');
   }
+
+  if (hasGh) {
+    // 将日志写入临时文件以处理多行文本
+    const tempFile = 'temp_release_log.md';
+    fs.writeFileSync(tempFile, latestLog);
+
+    try {
+      // 如果 Release 已存在，先删除 (确保覆盖)
+      try { execSync(`gh release delete ${version} -y`, { stdio: 'ignore' }); } catch (e) {}
+      
+      // 创建新的 Release
+      run(`gh release create ${version} -F ${tempFile} -t "${version}"`);
+      console.log(`\n✅ 本地 Release 创建成功！`);
+    } catch (err) {
+      console.error(`⚠️ GitHub Release 本地创建失败: ${err.message}`);
+    } finally {
+      if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
+    }
+  }
+
+  console.log(`\n🎉 发布流程已启动！`);
+  console.log(`🔗 线上发布状态查看: https://github.com/iBigQiang/mdPro/actions`);
+  console.log(`🔗 最终 Release 地址: https://github.com/iBigQiang/mdPro/releases/tag/${version}`);
 
 } catch (error) {
   console.error('\n❌ 发布流程中断:', error.message);
