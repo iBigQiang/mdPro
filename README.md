@@ -162,6 +162,15 @@ docker run -d -p 8080:80 doocs/md:latest
 
 关于本项目 Docker 镜像的更多详细信息，可以关注 https://github.com/doocs/docker-md
 
+## 每次更新后发布流程说明：
+ 1. 每次更新代码后只需在【升级日志文档.md】最上方写入新的增量更新日志；
+ 2. 修改好 package.json 的版本号；
+ 3. 在终端运行：pnpm release（或 node scripts/release-pro.mjs）；
+
+ 注意：此脚本依赖于 GitHub 官方命令行工具 gh。如果您本地尚未安装并登录，请先执行 gh auth login 平衡
+
+
+
 ## 👥 谁在使用
 
 请查看 [📋 USERS.md](USERS.md) 文件，了解使用本项目的公众号。
