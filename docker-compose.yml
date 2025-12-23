@@ -1,0 +1,7 @@
+services:
+  mdpro:
+    image: ghcr.io/ibigqiang/mdpro:latest
+    container_name: mdpro
+    ports:
+      - "8080:80"
+    restart: always

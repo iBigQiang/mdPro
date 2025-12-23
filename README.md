@@ -184,7 +184,23 @@ docker run -d --name mdpro -p 8080:80 ghcr.io/ibigqiang/mdpro:latest
 ```
 运行后，访问 `http://localhost:8080` 即可使用。
 
-### 3. 自行构建镜像
+### 3. 通过 Docker Compose 部署 (推荐)
+在根目录下直接运行：
+```bash
+docker-compose up -d
+```
+附 `docker-compose.yml` 内容：
+```yaml
+services:
+  mdpro:
+    image: ghcr.io/ibigqiang/mdpro:latest
+    container_name: mdpro
+    ports:
+      - "8080:80"
+    restart: always
+```
+
+### 4. 自行构建镜像
 如果您想基于本地代码构建：
 ```bash
 docker build -t mdpro .
