@@ -123,12 +123,31 @@ pnpm web wrangler:deploy # cloudflare workers 部署命令
 
 
 
-## 每次更新后发布流程说明：
- 1. 每次更新代码后只需在【升级日志文档.md】最上方写入新的增量更新日志；
- 2. 修改好 package.json 的版本号；
- 3. 在终端运行：pnpm release（或 node scripts/release-pro.mjs）；
+## 💻 本地开发与开发运行
 
- 注意：此脚本依赖于 GitHub 官方命令行工具 gh。如果您本地尚未安装并登录，请先执行 gh auth login 平衡
+如果您想在本地运行本项目进行测试或二次开发，请参考以下步骤：
+
+**1. 克隆仓库到本地**
+```bash
+git clone https://github.com/iBigQiang/mdPro.git
+cd mdPro
+```
+
+**2. 安装依赖**
+项目使用 pnpm 进行包管理：
+```bash
+pnpm install
+```
+
+**3. 启动开发模式**
+```bash
+pnpm web dev
+```
+运行后，在浏览器访问：[http://localhost:5173/md/](http://localhost:5173/md/) 即可预览实时修改效果。
+
+> **提示**：为何是 `/md/` 而不是 `/mdPro/`？这是因为本地开发环境下 Vite 默认配置了 `/md/` 作为 base 路径，而 `/mdPro/` 仅在发布到 GitHub Pages 时生效。
+
+---
 
 ## 🐳 Docker 部署
 
