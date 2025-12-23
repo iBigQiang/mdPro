@@ -1,0 +1,454 @@
+:root {
+  --brand-color: var(--md-primary-color);
+  --brand-color-dark: color-mix(in srgb, var(--md-primary-color) 85%, black);
+  --brand-color-light: color-mix(in srgb, var(--md-primary-color) 10%, white);
+  --blockquote-border-color: var(--brand-color-light);
+  --table-header-bg: rgba(0, 0, 0, 0.05);
+  --table-header-fg: #333333;
+}
+
+/* ==================== 容器样式 ==================== */
+#output {
+  font-family: var(--md-font-family);
+  font-size: var(--md-font-size);
+  line-height: 1.75;
+  text-align: left;
+}
+
+#output section > :first-child {
+  margin-top: 0 !important;
+}
+
+/* ==================== 段落 (核心阅读体验) ==================== */
+p {
+  margin: 10px 0;
+  line-height: 1.95;
+  letter-spacing: 0.5px;
+  color: var(--foreground);
+  text-align: justify;
+  font-size: 18px; /* 更大的字号 */
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  text-indent: 0; /* 不缩进 */
+}
+
+/* ==================== 一级标题 ==================== */
+h1 {
+  padding: 0.5em 1em;
+  border-bottom: 2px solid var(--md-primary-color);
+  font-size: calc(var(--md-font-size) * 1.4) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 2em auto 1em;
+  text-align: center;
+}
+
+/* ==================== 二级标题 ==================== */
+h2 {
+  display: block;
+  width: fit-content;
+  margin: 1em auto;
+  text-align: center;
+  font-size: 24px !important;
+  color: var(--brand-color) !important;
+  font-weight: 600 !important;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-clip: content-box;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent calc(100% - 15px),
+    rgba(0, 152, 116, 0) calc(100% - 0.65em),
+    var(--brand-color) 100%
+  ) !important;
+  line-height: 1.6;
+  padding: 0 8px;
+  border-radius: 10px;
+}
+
+/* ==================== 三级标题 ==================== */
+h3 {
+  display: inline;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  border-left: none !important;
+  font-size: 20px !important;
+  color: var(--brand-color-dark) !important;
+  font-weight: 700 !important;
+  line-height: 1.8;
+  padding: 2px 6px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 0.5em;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--brand-color) 70%, transparent) 0%,
+    color-mix(in srgb, var(--brand-color) 40%, transparent) 50%,
+    color-mix(in srgb, var(--brand-color) 20%, transparent) 100%
+  );
+  margin: 2em 8px 0.75em 0;
+}
+
+/* ==================== 四级标题 ==================== */
+h4 {
+  display: inline;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  border-left: none !important;
+  font-size: 18px !important;
+  color: color-mix(in srgb, var(--brand-color) 70%, black) !important;
+  font-weight: 600 !important;
+  line-height: 1.8;
+  padding: 2px 6px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 0.45em;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--brand-color) 65%, transparent) 0%,
+    color-mix(in srgb, var(--brand-color) 35%, transparent) 50%,
+    color-mix(in srgb, var(--brand-color) 5%, transparent) 100%
+  );
+  margin: 2em 8px 0.5em 0;
+}
+
+/* ==================== 五级标题 ==================== */
+h5 {
+  font-size: var(--md-font-size) !important;
+  border-radius: 6px;
+  margin: 1.5em 8px 0.5em;
+  color: var(--md-primary-color);
+  font-weight: bold;
+}
+
+/* ==================== 六级标题 ==================== */
+h6 {
+  font-size: var(--md-font-size) !important;
+  border-radius: 6px;
+  margin: 1.5em 8px 0.5em;
+  color: var(--md-primary-color);
+}
+
+/* ============解决任意两个标题紧邻时不换行的问题============ */
+h2 + h2::before,
+h2 + h4::before,
+h2 + h5::before,
+h2 + h6::before,
+h2 + h3::before,
+h3 + h3::before,
+h3 + h4::before,
+h3 + h5::before,
+h3 + h6::before,
+h4 + h2::before,
+h4 + h3::before,
+h4 + h4::before,
+h4 + h5::before,
+h4 + h6::before,
+h5 + h2::before,
+h5 + h3::before,
+h5 + h4::before,
+h5 + h5::before,
+h5 + h6::before,
+h6 + h2::before,
+h6 + h3::before,
+h6 + h4::before,
+h6 + h5::before,
+h6 + h6::before {
+  content: '';
+  display: block;
+}
+
+/* ==================== 段落 ==================== */
+p {
+  margin: 1.5em 8px;
+  letter-spacing: 0.1em;
+  color: hsl(var(--foreground));
+}
+
+/* ==================== 引用块 ==================== */
+blockquote {
+  font-style: italic;
+  padding: 1em 1em 1em 2em;
+  border: 0px solid var(--blockquote-border-color) !important;
+  border-left: 3px solid var(--brand-color) !important;
+  border-radius: 6px;
+  color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 1em;
+  margin-bottom: 1em;
+  /* background: var(--blockquote-background) !important; */
+  background-color: var(--brand-color-light);
+}
+
+blockquote > p {
+  font-size: 1em;
+  letter-spacing: 0.1em;
+  color: hsl(var(--foreground));
+  margin: 0;
+}
+
+/* ==================== GFM 警告块 ==================== */
+.markdown-alert {
+  font-style: italic;
+}
+
+.alert-title-note,
+.alert-title-tip,
+.alert-title-info,
+.alert-title-important,
+.alert-title-warning,
+.alert-title-caution {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.alert-title-note {
+  color: #478be6;
+}
+.alert-title-tip {
+  color: #57ab5a;
+}
+.alert-title-info {
+  color: #93c5fd;
+}
+.alert-title-important {
+  color: #986ee2;
+}
+.alert-title-warning {
+  color: #c69026;
+}
+.alert-title-caution {
+  color: #e5534b;
+}
+
+.alert-icon-note {
+  fill: #478be6;
+}
+.alert-icon-tip {
+  fill: #57ab5a;
+}
+.alert-icon-info {
+  fill: #93c5fd;
+}
+.alert-icon-important {
+  fill: #986ee2;
+}
+.alert-icon-warning {
+  fill: #c69026;
+}
+.alert-icon-caution {
+  fill: #e5534b;
+}
+
+/* ==================== 代码块 ==================== */
+pre.code__pre,
+.hljs.code__pre {
+  font-size: 90%;
+  overflow-x: auto;
+  border-radius: 8px;
+  padding: 0 !important;
+  line-height: 1.5;
+  margin: 10px 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+pre.code__pre > code,
+.hljs.code__pre > code {
+  display: block;
+  padding: 0.5em 1em 1em;
+  text-indent: 0;
+  color: inherit;
+  background: none;
+  white-space: pre;
+  margin: 0;
+  font-family:
+    'Fira Code',
+    Menlo,
+    Operator Mono,
+    Consolas,
+    Monaco,
+    monospace;
+}
+
+/* ==================== 行内代码 ==================== */
+code {
+  font-size: 90%;
+  color: #d14;
+  background: rgba(27, 31, 35, 0.05);
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+
+/* ==================== 图片 ==================== */
+img {
+  display: block;
+  max-width: 100%;
+  margin: 0.1em auto 0.5em;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+figcaption,
+.md-figcaption {
+  text-align: center;
+  color: #888;
+  font-size: 0.8em;
+}
+
+/* ==================== 列表 ==================== */
+ol {
+  padding-left: 1.5em;
+  margin-left: 0;
+  color: hsl(var(--foreground));
+}
+
+ul {
+  padding-left: 1.5em;
+  margin-left: 0;
+  color: hsl(var(--foreground));
+}
+
+li {
+  margin: 0.5em 8px;
+  color: hsl(var(--foreground));
+}
+
+/* ==================== 脚注 ==================== */
+p.footnotes {
+  margin: 0.5em 8px;
+  font-size: 80%;
+  color: hsl(var(--foreground));
+}
+
+/* ==================== 图表 ==================== */
+figure {
+  margin: 1.5em 8px;
+  color: hsl(var(--foreground));
+}
+
+/* ==================== 分隔线 ==================== */
+hr {
+  height: 1px;
+  border: none;
+  margin: 2em 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+}
+
+/* ==================== 强调 ==================== */
+em {
+  font-style: italic;
+  font-size: inherit;
+}
+
+/* ==================== 链接 ==================== */
+a {
+  color: #576b95;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: #35507e;
+  text-decoration: underline;
+}
+
+/* ==================== 粗体 ==================== */
+strong,
+b {
+  font-weight: bold;
+  color: var(--brand-color-dark) !important;
+  font-size: inherit;
+}
+
+/* ==================== 表格 ==================== */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  margin: 1em 8px;
+  color: hsl(var(--foreground));
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+thead {
+  font-weight: bold;
+}
+
+thead th {
+  background: var(--table-header-bg);
+  color: var(--table-header-fg);
+}
+
+th {
+  border: 1px solid #dfdfdf;
+  padding: 0.25em 0.5em;
+  color: hsl(var(--foreground));
+  word-break: keep-all;
+}
+
+td {
+  border: 1px solid #dfdfdf;
+  padding: 0.5em 1em;
+  color: hsl(var(--foreground));
+  word-break: keep-all;
+}
+
+/* ==================== KaTeX 公式 ==================== */
+.katex-inline {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.katex-block {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+/* ==================== 标记高亮 ==================== */
+.markup-highlight {
+  background-color: var(--md-primary-color);
+  padding: 2px 4px;
+  border-radius: 2px;
+  color: #fff;
+}
+
+.markup-underline {
+  text-decoration: none;
+  background-image: linear-gradient(to right, #fece00, #fff176); /* 使用线性渐变实现纯色背景，方便控制位置和大小 */
+  background-position: 0 100%; /* 稍微向上一点，避免贴底太紧，或者保持 100% */
+  background-repeat: no-repeat;
+  background-size: 100% 0.5em; /* 厚度调整 */
+  border-radius: 1px; /* 如果需要圆角可以添加 */
+  font-weight: 550;
+  padding: 2px 5px;
+}
+.markup-wavyline {
+  text-decoration: underline wavy;
+  text-decoration-color: var(--md-primary-color);
+  text-decoration-thickness: 3px;
+}
+
+/* ==================== 强子01自定义高亮 ==================== */
+mark {
+  background-color: var(--brand-color) !important;
+  color: #ffffff !important;
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+
+/* ==================== 打印样式修复 ==================== */
+@media print {
+  h2 {
+    background: none !important;
+    border-bottom: 4px solid var(--brand-color) !important;
+    border-radius: 0 !important;
+    padding-bottom: 8px !important;
+  }
+}

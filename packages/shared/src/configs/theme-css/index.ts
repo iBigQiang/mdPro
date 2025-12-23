@@ -8,6 +8,7 @@ import defaultCSS from './default.css?raw'
 import graceCSS from './grace.css?raw'
 import simpleCSS from './simple.css?raw'
 import WXGreenCSS from './WXGreen.css?raw'
+import WXColourCSS from './WXColour.css?raw'
 
 /**
  * 基础样式 CSS
@@ -22,6 +23,7 @@ export const themeMap = {
   grace: graceCSS,
   simple: simpleCSS,
   WXGreen: WXGreenCSS,
+  WXColour: WXColourCSS,
 } as const
 
 export type ThemeName = keyof typeof themeMap

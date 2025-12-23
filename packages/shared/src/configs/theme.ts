@@ -25,6 +25,11 @@ export const themeOptionsMap = {
     value: `WXGreen`,
     desc: `@BigQiang`,
   },
+  WXColour: {
+    label: `多彩微信`,
+    value: `WXColour`,
+    desc: `@BigQiang`,
+  },
 }
 
 export const themeOptions: IConfigOption<ThemeName>[] = [
@@ -46,6 +51,11 @@ export const themeOptions: IConfigOption<ThemeName>[] = [
   {
     label: `微信绿`,
     value: `WXGreen`,
+    desc: `@BigQiang`,
+  },
+  {
+    label: `多彩微信`,
+    value: `WXColour`,
     desc: `@BigQiang`,
   },
 ]
