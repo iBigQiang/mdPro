@@ -146,6 +146,7 @@ export const useExportStore = defineStore(`export`, () => {
       width: ${clonedWidth} !important;
       max-width: ${clonedMaxWidth} !important;
       height: auto !important;
+      min-height: 0 !important;
       overflow: visible !important;
       padding: ${padPx}px !important;
       transform: none !important;
@@ -169,6 +170,7 @@ export const useExportStore = defineStore(`export`, () => {
         width: auto !important;
         max-width: none !important;
         height: auto !important;
+        min-height: 0 !important;
         overflow: visible !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -232,7 +234,7 @@ export const useExportStore = defineStore(`export`, () => {
 
     try {
       const url = await toPng(clonedEl, options)
-      downloadFile(url, `${sanitizeTitle(currentPost.title)}${long ? `.long` : ``}.png`, `image/png`)
+      downloadFile(url, `${sanitizeTitle(currentPost.title)}.png`, `image/png`)
     }
     catch (err) {
       console.error('导出图片失败:', err)
