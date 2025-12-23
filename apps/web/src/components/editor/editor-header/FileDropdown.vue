@@ -81,6 +81,20 @@ function exportEditorContent2PDF() {
           导出
         </MenubarSubTrigger>
         <MenubarSubContent class="w-56">
+          <MenubarItem @click="exportEditorContent2MD()">
+            <FileText class="mr-2 size-4" />
+            Markdown 文件
+          </MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem @click="exportEditorContent2HTML()">
+            <FileCode class="mr-2 size-4" />
+            HTML 文件
+          </MenubarItem>
+          <MenubarItem @click="exportEditorContent2PureHTML()">
+            <FileCode class="mr-2 size-4" />
+            HTML（无样式）
+          </MenubarItem>
+          <MenubarSeparator />
           <MenubarItem @click="exportEditorContent2PDF()">
             <FileText class="mr-2 size-4" />
             导出PDF
@@ -143,6 +157,20 @@ function exportEditorContent2PDF() {
           导出
         </MenubarSubTrigger>
         <MenubarSubContent class="w-56">
+          <MenubarItem @click="exportEditorContent2MD()">
+            <FileText class="mr-2 size-4" />
+            Markdown 文件
+          </MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem @click="exportEditorContent2HTML()">
+            <FileCode class="mr-2 size-4" />
+            HTML 文件
+          </MenubarItem>
+          <MenubarItem @click="exportEditorContent2PureHTML()">
+            <FileCode class="mr-2 size-4" />
+            HTML（无样式）
+          </MenubarItem>
+          <MenubarSeparator />
           <MenubarItem @click="exportEditorContent2PDF()">
             <FileText class="mr-2 size-4" />
             导出PDF
