@@ -97,6 +97,7 @@ try {
   console.log(`\n🎉 发布流程已启动！`);
   console.log(`🔗 线上发布状态查看: https://github.com/iBigQiang/mdPro/actions`);
   console.log(`🔗 最终 Release 地址: https://github.com/iBigQiang/mdPro/releases/tag/${version}`);
+  console.log(`🐳 Docker 镜像构建已自动触发: ghcr.io/ibigqiang/mdpro:latest`);
 
 } catch (error) {
   console.error('\n❌ 发布流程中断:', error.message);

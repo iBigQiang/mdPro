@@ -169,8 +169,28 @@ docker run -d -p 8080:80 doocs/md:latest
 
  注意：此脚本依赖于 GitHub 官方命令行工具 gh。如果您本地尚未安装并登录，请先执行 gh auth login 平衡
 
+## 🐳 Docker 部署
 
+本项目支持通过 Docker 快速部署，镜像托管在 GitHub Container Registry (GHCR)。
 
+### 1. 拉取镜像
+```bash
+docker pull ghcr.io/ibigqiang/mdpro:latest
+```
+
+### 2. 运行容器
+```bash
+docker run -d --name mdpro -p 8080:80 ghcr.io/ibigqiang/mdpro:latest
+```
+运行后，访问 `http://localhost:8080` 即可使用。
+
+### 3. 自行构建镜像
+如果您想基于本地代码构建：
+```bash
+docker build -t mdpro .
+docker run -d -p 8080:80 mdpro
+```
+ 
 ## 👥 谁在使用
 
 请查看 [📋 USERS.md](USERS.md) 文件，了解使用本项目的公众号。
