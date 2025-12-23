@@ -201,7 +201,33 @@ docker build -t my-mdpro .
 ```bash
 docker run -d --name my-mdpro -p 8080:80 my-mdpro
 ```
- 
+
+## 🚀 自动化发布与运维
+
+本项目集成了高度自动化的发布流程，运维人员只需执行一条命令即可完成版本更新、Tag 打标、代码推送及 Docker 镜像构建。
+
+### 1. 自动发布命令
+
+在项目根目录下运行：
+
+```bash
+pnpm release
+```
+
+**该命令会自动执行以下操作：**
+1.  **自动提取日志**：从 `升级日志文档.md` 中提取最新的增量更新内容。
+2.  **版本更新**：自动更新 `package.json` 中的版本号。
+3.  **Git 提交**：自动执行 `git commit`，提交信息包含版本号。
+4.  **打标签**：自动创建对应的 Git Tag (如 `v1.2.0`)。
+5.  **代码推送**：自动执行 `git push` 推送代码及 Tag 到远程仓库。
+6.  **触发构建**：GitHub Actions 监听到 Tag 推送后，会自动触发 CI/CD 流程，构建并发布最新的 Docker 镜像。
+
+### 2. 验证发布
+
+命令执行完成后，您可以访问以下链接查看发布状态：
+- **Release 页面**: [https://github.com/iBigQiang/mdPro/releases](https://github.com/iBigQiang/mdPro/releases)
+- **构建状态**: [https://github.com/iBigQiang/mdPro/actions](https://github.com/iBigQiang/mdPro/actions)
+
 ## 👥 谁在使用
 
 请查看 [📋 USERS.md](USERS.md) 文件，了解使用本项目的公众号。
