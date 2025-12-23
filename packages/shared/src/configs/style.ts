@@ -239,7 +239,7 @@ export const defaultStyleConfig = {
   isMacCodeBlock: true,
   isShowLineNumber: false,
   isCountStatus: false,
-  theme: themeOptions[3].value,
+  theme: themeOptions[4].value,
   fontFamily: fontFamilyOptions[0].value,
   fontSize: fontSizeOptions[2].value,
   primaryColor: colorOptions[1].value,

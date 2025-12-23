@@ -23,7 +23,7 @@ export const useUIStore = defineStore(`ui`, () => {
   const hasShownAIToolboxHint = store.reactive(`hasShownAIToolboxHint`, false)
 
   // 是否打开右侧滑块
-  const isOpenRightSlider = store.reactive(addPrefix(`is_open_right_slider`), false)
+  const isOpenRightSlider = store.reactive(addPrefix(`is_open_right_slider`), true)
 
   // 是否打开文章列表滑块
   const isOpenPostSlider = store.reactive(addPrefix(`is_open_post_slider`), false)
