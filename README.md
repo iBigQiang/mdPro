@@ -161,11 +161,23 @@ services:
     restart: always
 ```
 
-### 4. 自行构建镜像
-如果您想基于本地代码构建：
+### 4. 自行构建镜像 (从源码构建)
+如果您想基于本地修改后的代码或最新的 master 分支构建镜像，可以参考以下步骤：
+
+**1. 克隆仓库到本地**
 ```bash
-docker build -t mdpro .
-docker run -d -p 8080:80 mdpro
+git clone https://github.com/iBigQiang/mdPro.git
+cd mdPro
+```
+
+**2. 构建 Docker 镜像**
+```bash
+docker build -t my-mdpro .
+```
+
+**3. 启动容器**
+```bash
+docker run -d --name my-mdpro -p 8080:80 my-mdpro
 ```
  
 ## 👥 谁在使用
