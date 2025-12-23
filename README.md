@@ -153,6 +153,9 @@ pnpm web dev
 
 本项目支持通过 Docker 快速部署，镜像托管在 GitHub Container Registry (GHCR)。
 
+> [!IMPORTANT]
+> **首次部署提示**：如果拉取镜像时报错 `denied: denied`，是因为 GHCR 镜像默认为私有。请前往 GitHub 仓库的 **Packages** 页面，进入 `mdpro` 设置，将 **Package Visibility** 设置为 **Public**。
+
 ### 1. 拉取镜像
 ```bash
 docker pull ghcr.io/ibigqiang/mdpro:latest
