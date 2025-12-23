@@ -304,7 +304,7 @@ function togglePreviewMode() {
     <div class="flex flex-wrap items-center gap-2">
       <Button
         variant="outline"
-        class="h-9"
+        class="h-9 hidden md:inline-flex"
         @click="togglePreviewMode"
       >
         <component
@@ -323,10 +323,9 @@ function togglePreviewMode() {
         <span>复制</span>
       </Button>
 
-      <!-- 导出按钮组 -->
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
-          <Button variant="outline" class="h-9 hidden md:inline-flex">
+          <Button variant="outline" class="h-9">
             <Download class="mr-2 h-4 w-4" />
             <span>导出</span>
             <ChevronDown class="ml-2 h-4 w-4 opacity-50" />
