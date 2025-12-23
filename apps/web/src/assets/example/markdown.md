@@ -285,5 +285,5 @@ Markdown 是一种简单、强大且易于掌握的标记语言，通过学习�
 ---
 
 <center>
-    <img src="https://cdn-doocs.oss-cn-shenzhen.aliyuncs.com/gh/doocs/md/images/1648303220922-7e14aefa-816e-44c1-8604-ade709ca1c69.png" style="width: 100px;">
+    <img src="./WXGZH_QQ88667178.png" style="width: 300px;">
 </center>
