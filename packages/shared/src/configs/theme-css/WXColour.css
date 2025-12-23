@@ -420,7 +420,11 @@ td {
 
 .markup-underline {
   text-decoration: none;
-  background-image: linear-gradient(to right, #fece00, #fff176); /* 使用线性渐变实现纯色背景，方便控制位置和大小 */
+  background-image: linear-gradient(
+    to right, 
+    color-mix(in srgb, var(--brand-color) 70%, white) 0%, 
+    color-mix(in srgb, var(--brand-color) 30%, white) 100%
+  ); /* 使用动态颜色渐变 */
   background-position: 0 100%; /* 稍微向上一点，避免贴底太紧，或者保持 100% */
   background-repeat: no-repeat;
   background-size: 100% 0.5em; /* 厚度调整 */
