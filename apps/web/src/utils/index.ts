@@ -140,10 +140,10 @@ export async function exportPDF(title: string = `untitled`) {
       <style>
         @page { 
           size: auto; 
-          margin-top: 20mm; /* 预留 20mm 空间供页眉使用，确保每一页正文都不被遮挡 */
-          margin-bottom: 10mm; 
-          margin-left: 10mm; 
-          margin-right: 10mm; 
+          margin-top: 15mm; /* 预留 20mm 空间供页眉使用，确保每一页正文都不被遮挡 */
+          margin-bottom: 15mm; 
+          margin-left: 15mm; 
+          margin-right: 15mm; 
         }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
         @media print {
