@@ -16,6 +16,8 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    # 避免发布时重复构建：如果是 tag 则运行；如果是 branch 且 commit message 不是 release 则运行
+    if: "github.ref_type == 'tag' || !startsWith(github.event.head_commit.message, 'release: v')"
     permissions:
       contents: read
       packages: write
