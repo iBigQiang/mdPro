@@ -140,7 +140,7 @@ export async function exportPDF(title: string = `untitled`) {
       <style>
         @page { 
           size: auto; 
-          margin-top: 0; /* 隐藏浏览器默认页眉（时间、文件名） */
+          margin-top: 20mm; /* 修正：使用 page margin 控制每一页的顶部边距 */
           margin-bottom: 10mm; 
           margin-left: 10mm; 
           margin-right: 10mm; 
@@ -149,7 +149,7 @@ export async function exportPDF(title: string = `untitled`) {
         @media print {
           body { 
             margin: 0; 
-            padding-top: 25mm; /* 增加顶部边距（原 15mm -> 25mm） */
+            padding-top: 0; /* 重置 padding，交由 @page margin 控制 */
           }
           table { width: auto !important; table-layout: auto !important; border-collapse: collapse; }
           th, td { word-break: keep-all !important; white-space: nowrap !important; }
