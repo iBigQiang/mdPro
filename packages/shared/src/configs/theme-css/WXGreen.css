@@ -42,27 +42,17 @@ h1 {
 
 /* ==================== 二级标题 ==================== */
 h2 {
-  display: block;
-  width: fit-content;
+  display: inline-block;
   margin: 1em auto;
   text-align: center;
   font-size: 24px !important;
-  color: #009874 !important;              /* 直接使用颜色值 */
+  color: #009874 !important;
   font-weight: 600 !important;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  background-clip: content-box;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background: linear-gradient(
-    to bottom,
-    transparent 60%,                       /* 替换 calc() 为固定百分比 */
-    rgba(0, 152, 116, 0) 65%,              /* 替换 calc() */
-    #009874 100%                           /* 直接使用颜色值 */
-  ) !important;
   line-height: 1.6;
-  padding: 0 8px;
-  border-radius: 10px;
+  padding: 0 8px 6px;
+  background: none !important;
+  /* 用内阴影模拟底边色条，兼容微信公众号 */
+  box-shadow: inset 0 -10px 0 rgba(0, 152, 116, 0.25);
 }
 
 /* ==================== 三级标题 ==================== */
