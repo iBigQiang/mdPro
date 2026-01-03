@@ -2,13 +2,16 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
+import readline from 'readline';
+
 /**
  * 自动化发布助手 (Pro Max版)
  * 功能：
- * 1. 自动计算补丁版本 (Patch Version)
- * 2. 自动提取 Git 提交记录生成日志内容
- * 3. 自动更新 package.json 和 升级日志文档.md
- * 4. 自动 Commit, Tag, Push, Release
+ * 1. 自动检测未提交代码，支持交互式提交
+ * 2. 自动计算补丁版本 (Patch Version)
+ * 3. 自动提取 Git 提交记录生成日志内容
+ * 4. 自动更新 package.json 和 升级日志文档.md
+ * 5. 自动 Commit, Tag, Push, Release
  */
 
 const isDryRun = process.argv.includes('--dry-run');
@@ -31,20 +34,57 @@ function run(command, options = {}) {
   return "";
 }
 
-try {
-  // 1. 读取当前版本
-  const pkgPath = path.resolve('package.json');
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-  const currentVersion = pkg.version;
-  
-  // 计算新版本 (1.2.3 -> 1.2.4)
-  const versionParts = currentVersion.split('.').map(Number);
-  versionParts[2] += 1;
-  const newVersion = versionParts.join('.');
-  const newVersionTag = `v${newVersion}`;
-  const currentVersionTag = `v${currentVersion}`;
+// 交互式询问函数
+function askQuestion(query) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  return new Promise(resolve => rl.question(query, ans => {
+    rl.close();
+    resolve(ans);
+  }));
+}
 
-  console.log(`🚀 ${isDryRun ? '[DRY RUN] ' : ''}准备发布: ${currentVersionTag} -> ${newVersionTag}`);
+(async () => {
+  try {
+    // 0. 检查是否有未提交的代码
+    // 排除 package.json 和 升级日志文档.md 的变更检测（因为脚本本身会改它们），
+    // 但通常这时它们还没改。我们只关心 src 下的代码更改。
+    // 简单起见，检查所有变更。
+    let status = "";
+    try {
+      status = execSync('git status --porcelain').toString().trim();
+    } catch(e) {}
+
+    if (status) {
+      console.log('⚠️  检测到工作区有未提交的代码变更：');
+      console.log(status.split('\n').slice(0, 5).map(s => '   ' + s).join('\n') + (status.split('\n').length > 5 ? '\n   ...' : ''));
+      
+      const answer = await askQuestion('\n🔨 请输入本次变更的简要描述 (用于生成日志，回车跳过直接发布): ');
+      if (answer && answer.trim()) {
+        console.log('📦 提交代码变更...');
+        run('git add .');
+        run(`git commit -m "${answer.trim()}"`);
+        console.log('✅ 已提交变更，将包含在本次日志中。\n');
+      } else {
+        console.log('⏩ 跳过提交，这部分变更将不会出现在自动日志中。\n');
+      }
+    }
+
+    // 1. 读取当前版本
+    const pkgPath = path.resolve('package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    const currentVersion = pkg.version;
+    
+    // 计算新版本 (1.2.3 -> 1.2.4)
+    const versionParts = currentVersion.split('.').map(Number);
+    versionParts[2] += 1;
+    const newVersion = versionParts.join('.');
+    const newVersionTag = `v${newVersion}`;
+    const currentVersionTag = `v${currentVersion}`;
+  
+    console.log(`🚀 ${isDryRun ? '[DRY RUN] ' : ''}准备发布: ${currentVersionTag} -> ${newVersionTag}`);
 
   // 2. 获取 Git 增量日志
   // 如果没有上一个 tag，就获取所有日志 (防错)
@@ -174,3 +214,4 @@ try {
   console.error('\n❌ 错误:', error.message);
   process.exit(1);
 }
+})();
