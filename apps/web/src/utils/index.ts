@@ -149,7 +149,7 @@ export async function exportPDF(title: string = `untitled`) {
         @media print {
           body { 
             margin: 0; 
-            padding-top: 15mm; /* 补偿隐藏页眉后的顶部边距 */
+            padding-top: 25mm; /* 增加顶部边距（原 15mm -> 25mm） */
           }
           table { width: auto !important; table-layout: auto !important; border-collapse: collapse; }
           th, td { word-break: keep-all !important; white-space: nowrap !important; }
