@@ -47,7 +47,7 @@ h2 {
   margin: 1em auto;
   text-align: center;
   font-size: 24px !important;
-  color: #009874 !important;              /* 直接使用颜色值 */
+  color: var(--brand-green) !important;
   font-weight: 600 !important;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
@@ -56,9 +56,9 @@ h2 {
   background-size: 100% 100%;
   background: linear-gradient(
     to bottom,
-    transparent 60%,                       /* 替换 calc() 为固定百分比 */
-    rgba(0, 152, 116, 0) 65%,              /* 替换 calc() */
-    #009874 100%                           /* 直接使用颜色值 */
+    transparent calc(100% - 15px),
+    rgba(0, 152, 116, 0) calc(100% - 0.65em),
+    var(--brand-green) 100%
   ) !important;
   line-height: 1.6;
   padding: 0 8px;
