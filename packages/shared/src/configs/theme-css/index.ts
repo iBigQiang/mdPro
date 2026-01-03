@@ -7,8 +7,8 @@ import baseCSS from './base.css?raw'
 import defaultCSS from './default.css?raw'
 import graceCSS from './grace.css?raw'
 import simpleCSS from './simple.css?raw'
-import WXGreenCSS from './WXGreen.css?raw'
 import WXColourCSS from './WXColour.css?raw'
+import WXGreenCSS from './WXGreen.css?raw'
 
 /**
  * 基础样式 CSS

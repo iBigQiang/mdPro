@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import zanshangImg from './WX88667178_ZanShang.jpg'
+
 const props = defineProps({
   visible: {
     type: Boolean,

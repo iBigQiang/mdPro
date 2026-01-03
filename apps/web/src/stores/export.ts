@@ -12,7 +12,6 @@ import { usePostStore } from './post'
 import { useRenderStore } from './render'
 import { useThemeStore } from './theme'
 
-
 /**
  * 导出功能 Store
  * 负责处理各种导出功能：HTML、PDF、MD、图片等
@@ -74,12 +73,12 @@ export const useExportStore = defineStore(`export`, () => {
     // 注入全局样式到 head（确保对克隆元素生效）
     const globalStyle = document.createElement('style')
     globalStyle.id = 'export-global-style'
-    
+
     // 根据模式决定样式
-    const tableWidthStyle = isFullScreenMode 
+    const tableWidthStyle = isFullScreenMode
       ? `width: auto !important; max-width: none !important; table-layout: auto !important;`
       : `width: 100% !important; max-width: 100% !important; table-layout: fixed !important;`
-    
+
     const cellWidthStyle = isFullScreenMode
       ? `white-space: nowrap !important; word-break: keep-all !important; width: auto !important; max-width: none !important; min-width: 0 !important;`
       : `white-space: normal !important; word-break: break-word !important;`
@@ -127,14 +126,14 @@ export const useExportStore = defineStore(`export`, () => {
     // 深度克隆预览元素
     const clonedEl = originalEl.cloneNode(true) as HTMLElement
     clonedEl.id = 'export-clone'
-    
+
     // 移除可能限制宽度的 CSS 类
     clonedEl.classList.remove('border-x', 'shadow-xl', 'w-full', 'max-w-full')
-    
+
     // 设置克隆元素基础样式 - 根据模式设置宽度
     const clonedWidth = fixedExportWidth > 0 ? `${fixedExportWidth}px` : 'auto'
     const clonedMaxWidth = fixedExportWidth > 0 ? `${fixedExportWidth}px` : 'none'
-    
+
     clonedEl.style.cssText = `
       position: fixed !important;
       left: 0 !important;
@@ -151,7 +150,7 @@ export const useExportStore = defineStore(`export`, () => {
       padding: ${padPx}px !important;
       transform: none !important;
     `
-    
+
     // 遍历所有子元素，强制移除宽度限制
     const allElements = clonedEl.querySelectorAll('*')
     allElements.forEach((el) => {
@@ -179,7 +178,7 @@ export const useExportStore = defineStore(`export`, () => {
 
     // 特别处理表格
     const tables = clonedEl.querySelectorAll('table')
-    tables.forEach(table => {
+    tables.forEach((table) => {
       const tbl = table as HTMLElement
       tbl.style.cssText = `
         width: auto !important;
@@ -189,7 +188,7 @@ export const useExportStore = defineStore(`export`, () => {
       `
       // 处理所有单元格
       const cells = tbl.querySelectorAll('th, td')
-      cells.forEach(cell => {
+      cells.forEach((cell) => {
         const c = cell as HTMLElement
         c.style.whiteSpace = 'nowrap'
         c.style.wordBreak = 'keep-all'
@@ -209,7 +208,7 @@ export const useExportStore = defineStore(`export`, () => {
     // 手机/电脑模式：直接使用固定宽度（padding 已包含在克隆元素中）
     const contentWidth = fixedExportWidth > 0 ? fixedExportWidth : measuredWidth
     const contentHeight = long ? clonedEl.scrollHeight : Math.min(clonedEl.scrollHeight, 800)
-    
+
     // 设置最终尺寸
     clonedEl.style.width = `${contentWidth}px`
     clonedEl.style.height = `${contentHeight}px`

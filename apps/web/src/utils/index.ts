@@ -135,7 +135,7 @@ export async function exportPDF(title: string = `untitled`) {
     <html>
     <head>
       <meta charset="utf-8">
-      <title>⠀</title> 
+      <title>${safeTitle}</title>
       ${stylesToAdd}
       <style>
         @page { 
@@ -151,14 +151,6 @@ export async function exportPDF(title: string = `untitled`) {
             margin: 0; 
             padding-top: 0; /* 移除 padding，由 @page margin 控制正文起始位置 */
           }
-          .print-header-right {
-            position: fixed;
-            top: -14mm; /* 继续微调：上移至 -14mm 以对齐左侧系统时间 */
-            right: 0;
-            font-size: 8pt; 
-            color: #555;
-            z-index: 9999;
-          }
           table { width: auto !important; table-layout: auto !important; border-collapse: collapse; }
           th, td { word-break: keep-all !important; white-space: nowrap !important; }
           pre, .code__pre, blockquote, figure, table, .preview-table, .md-blockquote, .mermaid { break-inside: avoid; page-break-inside: avoid; }
@@ -169,7 +161,6 @@ export async function exportPDF(title: string = `untitled`) {
       </style>
     </head>
     <body>
-      <div class="print-header-right">${safeTitle}</div>
       <div style="width: 100%; min-width: fit-content;">
         ${htmlStr}
       </div>

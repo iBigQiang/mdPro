@@ -121,13 +121,12 @@ pnpm web wrangler:dev # cloudflare workers dev 模式
 pnpm web wrangler:deploy # cloudflare workers 部署命令
 ```
 
-
-
 ## 💻 本地开发与开发运行
 
 如果您想在本地运行本项目进行测试或二次开发，请参考以下步骤：
 
 **1. 克隆仓库到本地**
+
 ```bash
 git clone https://github.com/iBigQiang/mdPro.git
 cd mdPro
@@ -135,14 +134,17 @@ cd mdPro
 
 **2. 安装依赖**
 项目使用 pnpm 进行包管理：
+
 ```bash
 pnpm install
 ```
 
 **3. 启动开发模式**
+
 ```bash
 pnpm web dev
 ```
+
 运行后，在浏览器访问：[http://localhost:5173/md/](http://localhost:5173/md/) 即可预览实时修改效果。
 
 > **提示**：为何是 `/md/` 而不是 `/mdPro/`？这是因为本地开发环境下 Vite 默认配置了 `/md/` 作为 base 路径，而 `/mdPro/` 仅在发布到 GitHub Pages 时生效。
@@ -157,47 +159,58 @@ pnpm web dev
 > **首次部署提示**：如果拉取镜像时报错 `denied: denied`，是因为 GHCR 镜像默认为私有。请前往 GitHub 仓库的 **Packages** 页面，进入 `mdpro` 设置，将 **Package Visibility** 设置为 **Public**。
 
 ### 1. 拉取镜像
+
 ```bash
 docker pull ghcr.io/ibigqiang/mdpro:latest
 ```
 
 ### 2. 运行容器
+
 ```bash
 docker run -d --name mdpro -p 8080:80 ghcr.io/ibigqiang/mdpro:latest
 ```
+
 运行后，访问 `http://localhost:8080` 即可使用。
 
 ### 3. 通过 Docker Compose 部署 (推荐)
+
 在根目录下直接运行：
+
 ```bash
 docker-compose up -d
 ```
+
 附 `docker-compose.yml` 内容：
+
 ```yaml
 services:
   mdpro:
     image: ghcr.io/ibigqiang/mdpro:latest
     container_name: mdpro
     ports:
-      - "8080:80"
+      - '8080:80'
     restart: always
 ```
 
 ### 4. 自行构建镜像 (从源码构建)
+
 如果您想基于本地修改后的代码或最新的 master 分支构建镜像，可以参考以下步骤：
 
 **1. 克隆仓库到本地**
+
 ```bash
 git clone https://github.com/iBigQiang/mdPro.git
 cd mdPro
 ```
 
 **2. 构建 Docker 镜像**
+
 ```bash
 docker build -t my-mdpro .
 ```
 
 **3. 启动容器**
+
 ```bash
 docker run -d --name my-mdpro -p 8080:80 my-mdpro
 ```
@@ -215,6 +228,7 @@ pnpm release
 ```
 
 **该命令会自动执行以下操作：**
+
 1.  **自动提取日志**：从 `升级日志文档.md` 中提取最新的增量更新内容。
 2.  **版本更新**：自动更新 `package.json` 中的版本号。
 3.  **Git 提交**：自动执行 `git commit`，提交信息包含版本号。
@@ -225,6 +239,7 @@ pnpm release
 ### 2. 验证发布
 
 命令执行完成后，您可以访问以下链接查看发布状态：
+
 - **Release 页面**: [https://github.com/iBigQiang/mdPro/releases](https://github.com/iBigQiang/mdPro/releases)
 - **构建状态**: [https://github.com/iBigQiang/mdPro/actions](https://github.com/iBigQiang/mdPro/actions)
 
@@ -243,4 +258,3 @@ pnpm release
 ## 💬 反馈与交流
 
 如果你在使用过程中遇到问题，或者有好的建议，欢迎在 [🐛 Issues](https://github.com/iBigQiang/mdPro/issues) 中反馈。你也可以加入我们的交流群，和我们一起讨论，若群二维码失效，请添加好友，备注 `md`，我们会拉你进群。
-

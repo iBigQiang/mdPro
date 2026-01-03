@@ -51,7 +51,7 @@ h2 {
   text-align: center;
   font-size: 24px !important;
   color: #ffffff !important;
-  background:var(--brand-color) !important;
+  background: var(--brand-color) !important;
   font-weight: 600 !important;
   line-height: 1.5;
   padding: 3px 15px 5px;
@@ -342,7 +342,7 @@ a {
 a:hover,
 a:focus {
   color: var(--brand-color-dark);
-  text-decoration: underline; 
+  text-decoration: underline;
 }
 
 /* ==================== 粗体 ==================== */
@@ -412,8 +412,8 @@ td {
 .markup-underline {
   text-decoration: none;
   background-image: linear-gradient(
-    to right, 
-    color-mix(in srgb, var(--brand-color) 70%, white) 0%, 
+    to right,
+    color-mix(in srgb, var(--brand-color) 70%, white) 0%,
     color-mix(in srgb, var(--brand-color) 30%, white) 100%
   ); /* 使用动态颜色渐变 */
   background-position: 0 100%; /* 稍微向上一点，避免贴底太紧，或者保持 100% */
