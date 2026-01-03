@@ -153,10 +153,15 @@ export async function exportPDF(title: string = `untitled`) {
           }
           .print-header-right {
             position: fixed;
-            top: -14mm;
-            left: 15mm;
-            right: 15mm;
-            text-align: right;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15mm;
+            padding: 0 15mm 1mm;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
             font-size: 8pt;
             color: #555;
             z-index: 9999;
