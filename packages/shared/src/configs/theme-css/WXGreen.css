@@ -431,13 +431,3 @@ mark {
   border-radius: 4px;
   margin: 0 2px;
 }
-
-/* ==================== 打印样式修复 ==================== */
-@media print {
-  h2 {
-    background: none !important;
-    border-bottom: 4px solid var(--brand-green) !important;
-    border-radius: 0 !important;
-    padding-bottom: 8px !important;
-  }
-}
