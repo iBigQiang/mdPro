@@ -42,21 +42,33 @@ h1 {
 
 /* ==================== 二级标题 ==================== */
 h2 {
-  display: table;            /* 核心：实现收缩居中 */
+  display: table;
+  width: auto;
+  min-width: 10%;
+  max-width: 100%;
   margin: 1em auto;
   text-align: center;
-  color: #009874 !important; /* 硬编码颜色 */
+  font-size: 24px !important;
+  color: #009874 !important;
+  font-weight: 600 !important;
+  line-height: 1.6;
+  padding: 0 10px 5px;
   
-  /* 恢复线性渐变，但使用兼容写法 */
-  background: linear-gradient(
+  /* 优化方案：参考 h3，分离渐变色与定位尺寸 */
+  background-image: linear-gradient(
     to bottom,
-    transparent 60%,         /* 上部透明 */
-    rgba(0, 152, 116, 0) 65%,/* 过渡区 */
-    #009874 100%             /* 底部实色 */
-  ) !important;
+    rgba(0, 152, 116, 0), 
+    #009874
+  ) !important; 
+  background-position: center bottom;
+  background-size: 100% 15px; /* 控制底部条高度 */
+  background-repeat: no-repeat;
   
-  background-size: 100% 100%;
-  border-bottom: none;       /* 移除之前的试错代码 */
+  border-bottom: none;
+  border-radius: 8px;
+  box-shadow: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* ==================== 三级标题 ==================== */
