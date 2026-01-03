@@ -34,41 +34,67 @@ function run(command, options = {}) {
   return "";
 }
 
-// 交互式询问函数
-function askQuestion(query) {
+// 交互式询问函数 (支持多行输入)
+async function askMultiLineQuestion(query) {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
-  return new Promise(resolve => rl.question(query, ans => {
-    rl.close();
-    resolve(ans);
-  }));
+
+  console.log(query);
+  console.log('(支持多行输入，粘贴完成后请按两次回车/输入空行以结束)\n');
+
+  const lines = [];
+  
+  for await (const line of rl) {
+    if (line.trim() === '') {
+      rl.close();
+      break;
+    }
+    lines.push(line);
+  }
+
+  return lines.join('\n').trim();
 }
 
 (async () => {
   try {
     // 0. 检查是否有未提交的代码
-    // 排除 package.json 和 升级日志文档.md 的变更检测（因为脚本本身会改它们），
-    // 但通常这时它们还没改。我们只关心 src 下的代码更改。
-    // 简单起见，检查所有变更。
     let status = "";
     try {
       status = execSync('git status --porcelain').toString().trim();
     } catch(e) {}
 
+    let manualCommitMsg = "";
+
     if (status) {
       console.log('⚠️  检测到工作区有未提交的代码变更：');
       console.log(status.split('\n').slice(0, 5).map(s => '   ' + s).join('\n') + (status.split('\n').length > 5 ? '\n   ...' : ''));
       
-      const answer = await askQuestion('\n🔨 请输入本次变更的简要描述 (用于生成日志，回车跳过直接发布): ');
-      if (answer && answer.trim()) {
+      let answer = await askMultiLineQuestion('🔨 请输入本次变更的详细描述 (用于生成日志):');
+      
+      // 去除首尾引号 (常见于复制粘贴)
+      if (answer) {
+        answer = answer.replace(/^["']|["']$/g, '').trim();
+      }
+
+      if (answer) {
+        manualCommitMsg = answer;
         console.log('📦 提交代码变更...');
-        run('git add .');
-        run(`git commit -m "${answer.trim()}"`);
+        // 将多行消息作为 commit -m 参数 (由于 execSync 的限制，需谨慎处理换行，最好写入临时文件或转义，简单起见这里用双引号包裹并转义双引号)
+        // 更安全的做法：git commit -F - <<EOF ... EOF (但 win compatibility?)
+        // Node execSync 传参最稳妥是写文件。
+        const msgFile = '.git_commit_msg_tmp';
+        fs.writeFileSync(msgFile, answer);
+        try {
+          run('git add .');
+          execSync(`git commit -F ${msgFile}`, { stdio: 'inherit' });
+        } finally {
+           if (fs.existsSync(msgFile)) fs.unlinkSync(msgFile);
+        }
         console.log('✅ 已提交变更，将包含在本次日志中。\n');
       } else {
-        console.log('⏩ 跳过提交，这部分变更将不会出现在自动日志中。\n');
+        console.log('⏩ 跳过提交 (未输入描述)，这部分变更将不会出现在自动日志中。\n');
       }
     }
 
@@ -77,7 +103,7 @@ function askQuestion(query) {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     const currentVersion = pkg.version;
     
-    // 计算新版本 (1.2.3 -> 1.2.4)
+    // 计算新版本
     const versionParts = currentVersion.split('.').map(Number);
     versionParts[2] += 1;
     const newVersion = versionParts.join('.');
@@ -87,13 +113,32 @@ function askQuestion(query) {
     console.log(`🚀 ${isDryRun ? '[DRY RUN] ' : ''}准备发布: ${currentVersionTag} -> ${newVersionTag}`);
 
   // 2. 获取 Git 增量日志
-  // 如果没有上一个 tag，就获取所有日志 (防错)
+  // 优化：使用 %B 获取完整的 subject + body，并处理多行格式
   let gitLogs = "";
   try {
-    // 获取 currentVersionTag 到 HEAD 的 commit，排除 merge commit，格式化为 "- message"
-    const logCommand = `git log ${currentVersionTag}..HEAD --no-merges --pretty=format:"- %s"`;
-    // 注意：这里必须强制执行才能拿到 log，即使是 dry-run 也要看
-    gitLogs = execSync(logCommand).toString().trim();
+    // %B: raw body (unwrapped subject and body)
+    // 过滤掉 release 提交
+    const logCommand = `git log ${currentVersionTag}..HEAD --no-merges --pretty=format:"%B"`;
+    const rawLogs = execSync(logCommand).toString().trim();
+    
+    // 处理日志格式：
+    // 1. 过滤空行
+    // 2. 这里的 rawLogs 可能是多个 commit 的混合，每个 commit 用什么分隔？
+    // git log 默认没有分隔符如果只用 %B。最好加个自定义分隔符。
+    // 使用 format:"- %B%nDELIMITER"
+    const safeLogCommand = `git log ${currentVersionTag}..HEAD --no-merges --pretty=format:"- %B%n__DELIMITER__"`;
+    const rawLogsWithDelim = execSync(safeLogCommand).toString().trim();
+    
+    gitLogs = rawLogsWithDelim.split('__DELIMITER__')
+      .map(block => block.trim())
+      .filter(block => block && !block.includes('release: v'))
+      .map(block => {
+         // block 本身可能包含多行，首行已有 "- "，后续行需要缩进? 或者直接保留
+         // 简单处理：如果 body 有多行，保留原样
+         return block;
+      })
+      .join('\n\n'); // Commit 之间空一行
+      
   } catch (e) {
     console.log('⚠️ 无法获取 Git 日志 (可能没有上一个 tag)，将使用空日志。');
   }
