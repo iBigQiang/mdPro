@@ -140,7 +140,7 @@ export async function exportPDF(title: string = `untitled`) {
       <style>
         @page { 
           size: auto; 
-          margin-top: 15mm; /* 保持15mm边距 */
+          margin-top: 20mm; /* 预留 20mm 空间供页眉使用，确保每一页正文都不被遮挡 */
           margin-bottom: 10mm; 
           margin-left: 10mm; 
           margin-right: 10mm; 
@@ -149,17 +149,15 @@ export async function exportPDF(title: string = `untitled`) {
         @media print {
           body { 
             margin: 0; 
-            padding-top: 8mm; /* 增加内边距，给自定义标题留位置，避免遮挡正文 */
+            padding-top: 0; /* 移除 padding，由 @page margin 控制正文起始位置 */
           }
           .print-header-right {
             position: fixed;
-            top: 0; /* 紧贴内容区域顶部 (即距离纸张边缘 15mm) */
+            top: -14mm; /* 继续微调：上移至 -14mm 以对齐左侧系统时间 */
             right: 0;
-            font-size: 9pt; 
+            font-size: 8pt; 
             color: #555;
             z-index: 9999;
-            /* 尝试微调位置：如果想要它看起来像在页眉里，可以设为负值，但之前失败了。
-               现在让它位于内容区第一行，视觉上也是页眉。*/
           }
           table { width: auto !important; table-layout: auto !important; border-collapse: collapse; }
           th, td { word-break: keep-all !important; white-space: nowrap !important; }
