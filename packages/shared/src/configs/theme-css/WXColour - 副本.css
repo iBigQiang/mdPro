@@ -43,19 +43,27 @@ h1 {
 
 /* ==================== 二级标题 ==================== */
 h2 {
-  display: table;
-  width: auto;
-  min-width: 10%;
-  max-width: 100%;
-  margin: 1.5em auto;
+  display: block;
+  width: fit-content;
+  margin: 1em auto;
   text-align: center;
   font-size: 24px !important;
-  color: #ffffff !important;
-  background:var(--brand-color) !important;
+  color: var(--brand-color) !important;
   font-weight: 600 !important;
-  line-height: 1.5;
-  padding: 3px 15px 5px;
-  border-radius: 20px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-clip: content-box;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent calc(100% - 15px),
+    rgba(0, 152, 116, 0) calc(100% - 0.65em),
+    var(--brand-color) 100%
+  ) !important;
+  line-height: 1.6;
+  padding: 0 8px;
+  border-radius: 10px;
 }
 
 /* ==================== 三级标题 ==================== */
